@@ -353,6 +353,46 @@
   .kpi .kl{font-size:12px; color:var(--gray); font-weight:600;}
   .kpi .kv{font-family:'Fraunces',serif; font-weight:600; font-size:28px; color:var(--brown); margin-top:3px;}
   .kpi .kv span{font-size:13px; color:var(--gray); font-weight:400; margin-left:5px;}
+  .kpi .ks{font-size:11px; color:var(--mocha); margin-top:6px; line-height:1.45;}
+  .kpi.kpi-warn{background:linear-gradient(135deg,#FFF8EC,#FBF2DE); border-color:#F0DDBE;}
+  .kpi.kpi-warn .kv{color:var(--brown);}
+  .kpi.kpi-good{background:linear-gradient(135deg,#EEF7EF,#E4F0E4); border-color:#C8E3CC;}
+  .kpi.kpi-good .kv{color:#2A6D38;}
+  .kpi.kpi-info{background:linear-gradient(135deg,#F0EEFA,#E7E3F5); border-color:#CFCAE5;}
+  .kpi.kpi-info .kv{color:#4A2F8A;}
+
+  /* admin section label */
+  .adm-section-label{font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--brown); margin:6px 0 11px; padding-left:2px;}
+  .adm-section-sub{font-family:'Plus Jakarta Sans','Noto Sans KR',sans-serif; font-size:12px; color:var(--gray); font-weight:500;}
+
+  /* funnel chart */
+  .funnel{display:flex; flex-direction:column; gap:10px;}
+  .fn-row{display:grid; grid-template-columns:130px 1fr; gap:11px; align-items:center; font-size:12.5px;}
+  .fn-l{color:var(--mocha); font-weight:600;}
+  .fn-bar{position:relative; background:#F3ECDF; border-radius:8px; height:24px; overflow:hidden;}
+  .fn-fill{position:absolute; top:0; left:0; height:100%; border-radius:8px; transition:width .5s;}
+  .fn-v{position:absolute; right:9px; top:50%; transform:translateY(-50%); font-size:11.5px; font-weight:700; color:var(--brown); z-index:2;}
+  .fn-warn .fn-l{color:#C44;}
+
+  /* dormant cards */
+  .dorm-card{display:grid; grid-template-columns:1fr auto auto; gap:13px; align-items:center; padding:13px 14px; border-radius:11px; margin-bottom:8px;}
+  .dorm-card.dorm-warn{background:#FFF1DE; border:1px solid #F0DDBE;}
+  .dorm-card.dorm-danger{background:#FBE7E7; border:1px solid #F0C8C8;}
+  .dorm-l .dorm-h{font-weight:700; font-size:13.5px; color:var(--brown);}
+  .dorm-l .dorm-s{font-size:11.5px; color:var(--mocha); margin-top:2px;}
+  .dorm-n{font-family:'Fraunces',serif; font-weight:600; font-size:22px; color:var(--brown);}
+  .dorm-cta{background:var(--brown); color:#fff; font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:9px; border:none; cursor:pointer; white-space:nowrap;}
+  .dorm-cta:hover{background:var(--brown2);}
+
+  /* nationality + service rows */
+  .natrow, .svcrow{display:grid; grid-template-columns:1fr 90px; column-gap:11px; row-gap:4px; padding:9px 0; align-items:center; border-bottom:1px dashed var(--line);}
+  .natrow:last-of-type, .svcrow:last-of-type{border-bottom:none;}
+  .nat-h, .svc-h{display:flex; justify-content:space-between; align-items:center; font-size:12.5px; grid-column:1 / -1;}
+  .nat-l, .svc-l{font-weight:600; color:var(--ink);}
+  .nat-c, .svc-c{font-size:11.5px; color:var(--gray); font-weight:600;}
+  .nat-bar, .svc-bar{grid-column:1 / 2; background:#F3ECDF; border-radius:6px; height:9px; overflow:hidden; position:relative;}
+  .nat-fill, .svc-fill{height:100%; border-radius:6px; transition:width .5s;}
+  .nat-rev, .svc-rev{grid-column:2 / 3; font-family:'Fraunces',serif; font-weight:600; font-size:13.5px; color:var(--brown); text-align:right;}
 
   /* admin card */
   .admcard{background:#fff; border-radius:14px; padding:0; border:1px solid var(--line); margin-bottom:16px; overflow:hidden;}
@@ -384,7 +424,8 @@
   .bk-pr em{font-style:normal; font-size:10.5px; color:var(--gray); font-weight:400;}
   .bk-act{display:flex; gap:5px; align-items:center;}
   .tag.pk{background:#E4F0E4; color:#3F8D52; font-size:11px; font-weight:700; padding:3px 7px; border-radius:8px;}
-  .m-w b{font-weight:700;} .m-w i{font-style:normal; font-size:11px; color:var(--gray);}
+  .m-w{display:flex; flex-direction:column; gap:2px; min-width:0;}
+  .m-w b{font-weight:700; line-height:1.3;} .m-w i{font-style:normal; font-size:11px; color:var(--gray); line-height:1.3;}
   .m-tier{background:var(--brown); color:#fff; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:30px;}
   .m-bal{font-weight:700; color:#3F8D52;} .m-used{color:var(--mocha);}
   .m-bal em, .m-used em{font-style:normal; font-size:10.5px; color:var(--gray); font-weight:400; margin-left:3px;}
@@ -463,6 +504,13 @@
     .mtable .bk-hd, .mtable .bk-tr{grid-template-columns:1fr 1fr; gap:6px;}
     .chatlay{grid-template-columns:1fr; height:auto;}
     .camgrid{grid-template-columns:1fr 1fr;}
+    .fn-row{grid-template-columns:110px 1fr; gap:8px;}
+    .fn-l{font-size:11.5px;}
+    .fn-v{font-size:10.5px;}
+    .dorm-card{grid-template-columns:1fr auto; gap:8px;}
+    .dorm-card .dorm-cta{grid-column:1 / -1; width:100%;}
+    .natrow, .svcrow{grid-template-columns:1fr 80px;}
+    .adm-section-label{font-size:15px;}
   }
 
   /* ---- tour (둘러보기) ---- */
@@ -1033,8 +1081,8 @@ function rebuildPriceMenus(){
   ];
   // 스파(목욕)
   SERVICES.spa.menus = [
-    { id:'bath', nm:'스파(목욕)',    ds:`기본 케어 · ${WEIGHT_BANDS[w].label} 기준`,       pr: String(SERVICES.spa.weightPrices[w]) },
-    { id:'plus', nm:'스파 + 발톱',   ds:`발톱 깎기 포함`,                                  pr: String(SERVICES.spa.weightPrices[w] + 80000) },
+    { id:'bath', nm:'기본 케어',      ds:`목욕 · ${WEIGHT_BANDS[w].label} 기준`,            pr: String(SERVICES.spa.weightPrices[w]) },
+    { id:'plus', nm:'스파 + 발톱',    ds:`발톱 깎기 포함`,                                  pr: String(SERVICES.spa.weightPrices[w] + 80000) },
     { id:'medsh',nm:'약용 샴푸 추가', ds:`민감 피부용`,                                     pr: String(SERVICES.spa.weightPrices[w] + 60000) },
   ];
   // 수영장
@@ -2253,6 +2301,16 @@ function openVipPackages(){
         </div>
         <div class="vipsub">충전 가치 <b>${fmt(p.price)} VND</b> · 12개월 유효 · QR 결제 →</div>
       </button>`).join('')}
+
+    <!-- 맞춤 충전 (큰손 대응: 35M·50M·75M 등) -->
+    <button class="vipcard tap" style="background:linear-gradient(135deg,#FBF2E4,#F6E8D4);border:1.5px dashed var(--accent)" onclick="openCustomVip()">
+      <div class="viptop">
+        <div class="vippay" style="color:var(--brown);font-size:17px">맞춤 충전</div>
+        <div class="vipoff" style="background:var(--accent)">최대 −25%</div>
+      </div>
+      <div class="vipsub">35M · 50M · 75M 등 원하는 금액으로 충전 →</div>
+    </button>
+
     <div style="background:var(--cream2);border-radius:13px;padding:13px 15px;margin-top:8px;font-size:11.5px;line-height:1.7;color:var(--mocha)">
       <div><b>유효 기간</b> · 구매일로부터 12개월</div>
       <div><b>양도/선물</b> · 유효 기간 내 1회 다른 사람에게 양도 가능</div>
@@ -2263,6 +2321,90 @@ function openVipPackages(){
     <button class="btn ghost" style="margin-top:8px" onclick="openContactSheet()">상담받기 (직원 연결)</button>
     <button class="btn ghost" style="margin-top:8px" onclick="closeSheet()">닫기</button>
   `);
+}
+
+// 충전 금액 → 할인율 계산 (정액권 단계 룰을 자연스럽게 확장)
+// 5M 미만: 불가, 5M~: 10%, 10M~: 15%, 18M~: 20%, 25M~: 25%
+function discountForCharge(amount){
+  if(amount < 5000000) return null;        // 최소 충전 금액 미만
+  if(amount < 10000000) return 10;
+  if(amount < 18000000) return 15;
+  if(amount < 25000000) return 20;
+  return 25;                                 // 25M 이상 모두 25%
+}
+
+// 맞춤 충전 시트 (75M 큰손 대응)
+function openCustomVip(){
+  const presets = [35000000, 50000000, 75000000];
+  openSheetHTML(`<div class="grab"></div>
+    <div style="font-family:'Fraunces',serif;font-size:21px;color:var(--brown);font-weight:600;padding:0 2px 2px">맞춤 충전</div>
+    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">원하는 금액을 입력하시면 할인율이 자동 적용돼요.<br>최소 충전 금액은 5,000,000 VND입니다.</div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      ${presets.map(v=>`<button class="chip" type="button" onclick="setCustomVip(${v})" style="flex:1;min-width:0">${fmt(v/1000000)}M</button>`).join('')}
+    </div>
+
+    <div class="field" style="padding:0">
+      <label>충전 가치 (VND)</label>
+      <input id="customVipAmount" type="number" inputmode="numeric" placeholder="예: 35000000" oninput="updateCustomVipPreview()" min="5000000" step="1000000">
+    </div>
+
+    <div id="customVipPreview" style="background:var(--cream2);border-radius:13px;padding:14px 16px;margin-top:12px;font-size:12.5px;line-height:1.75;color:var(--mocha);min-height:80px">
+      <div style="color:var(--gray)">금액을 입력하면 결제 금액·할인율이 표시됩니다.</div>
+    </div>
+
+    <button id="customVipPay" class="btn dark" style="margin-top:14px;opacity:.5;pointer-events:none" onclick="payCustomVip()">QR 결제로 진행하기</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="openVipPackages()">← 정액권 목록으로</button>
+  `);
+}
+function setCustomVip(v){
+  const inp = document.getElementById('customVipAmount');
+  if(!inp) return;
+  inp.value = v;
+  updateCustomVipPreview();
+}
+function updateCustomVipPreview(){
+  const inp = document.getElementById('customVipAmount');
+  const prev = document.getElementById('customVipPreview');
+  const btn = document.getElementById('customVipPay');
+  if(!inp || !prev || !btn) return;
+  const amount = parseInt(inp.value, 10) || 0;
+  const off = discountForCharge(amount);
+  if(off === null){
+    prev.innerHTML = `<div style="color:var(--gray)">최소 충전 금액 <b style="color:var(--brown)">5,000,000 VND</b> 이상으로 입력해주세요.</div>`;
+    btn.style.opacity = '.5'; btn.style.pointerEvents = 'none';
+    return;
+  }
+  const pay = Math.round(amount * (100 - off) / 100);
+  const saving = amount - pay;
+  prev.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px dashed var(--line)">
+      <span>충전 가치</span><b style="color:var(--brown);font-size:14px">${fmt(amount)} VND</b>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+      <span>할인율</span><b style="color:var(--accentDk)">−${off}%</b>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px dashed var(--line)">
+      <span style="font-weight:700;color:var(--brown)">결제 금액</span>
+      <b style="color:var(--good);font-size:16px">${fmt(pay)} VND</b>
+    </div>
+    <div style="font-size:11px;color:var(--gray);text-align:right;margin-top:2px">${fmt(saving)} VND 절약</div>
+  `;
+  btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+  btn.dataset.amount = amount;
+  btn.dataset.pay = pay;
+  btn.dataset.off = off;
+}
+function payCustomVip(){
+  const btn = document.getElementById('customVipPay');
+  if(!btn) return;
+  const amount = parseInt(btn.dataset.amount, 10);
+  const pay = parseInt(btn.dataset.pay, 10);
+  const off = parseInt(btn.dataset.off, 10);
+  if(!amount || !pay) return;
+  // 기존 openPayVipQR과 동일한 흐름으로 진행 (가상의 pkg 객체)
+  const pkg = { id: 'pcustom', price: amount, pay, off };
+  openPayVipQR(pkg);
 }
 
 function openGiftVip(){
@@ -2839,6 +2981,9 @@ function vDone(b){
     ${s.vaccine?vaccineNoticeForBooking(b.petIds||[]):''}
     ${cautionsForService(b.service)}
 
+    <!-- 그루밍·스파 10회 패키지 안내 (해당 서비스에만 노출) -->
+    ${packagePromoForService(b)}
+
     <!-- 첫 예약 후 추가 정보 권유 (모두 선택, 미응답 시 더 이상 묻지 않음) -->
     ${shouldShowProfileBoost(b) ? renderProfileBoostCard() : ''}
 
@@ -3059,6 +3204,45 @@ function cautionsForService(key){
   return `<div class="card cautionCard">
     <div class="cc-h">📌 방문 전 안내</div>
     <ul class="cc-list">${C.map(t=>`<li>${t}</li>`).join('')}</ul>
+  </div>`;
+}
+
+// 그루밍·스파 10회 패키지 프로모션 안내 (vDone 화면 전용)
+// 사장님 원칙: 첫 예약은 마찰 없이, 패키지는 자연스럽게 소개만
+function packagePromoForService(b){
+  const PKG = {
+    grooming: {
+      title: '10회 패키지 + 2회 무료',
+      desc: '그루밍 12회를 10회 가격으로 · 12개월 유효',
+      saving: '약 17% 절약',
+      icon: '✂️',
+    },
+    spa: {
+      title: '10회 패키지 + 2회 무료',
+      desc: '스파(목욕) 12회를 10회 가격으로 · 90일 유효',
+      saving: '약 17% 절약',
+      icon: '🛁',
+    },
+  }[b.service];
+  if(!PKG) return '';
+  const p = S.pets.find(x=>x.id===(b.petIds||[])[0]);
+  if(!p) return '';
+  const w = wIdx(p.band || 'w2');
+  const single = SERVICES[b.service].weightPrices[w];
+  const pkg10 = single * 10;
+  return `<div class="card" style="padding:14px 16px;margin-top:14px;background:linear-gradient(135deg,#FBF2E4,#F6E8D4);border:1.5px solid #E8D4B2">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:24px">${PKG.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--brown);line-height:1.25">${PKG.title}</div>
+        <div style="font-size:11.5px;color:var(--mocha);margin-top:1px">${PKG.desc}</div>
+      </div>
+      <span style="background:var(--accent);color:#fff;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:30px;white-space:nowrap">${PKG.saving}</span>
+    </div>
+    <div style="font-size:12px;color:var(--mocha);line-height:1.55;background:rgba(255,255,255,.55);border-radius:9px;padding:8px 11px;margin-top:4px">
+      <b style="color:var(--brown)">${p.name}</b> 기준 (${WEIGHT_BANDS[w].label}): 1회 ${fmt(single)} → 10회 패키지 <b style="color:var(--brown)">${fmt(pkg10)} VND</b> + <b style="color:var(--accentDk)">2회 무료</b>
+    </div>
+    <button class="btn ghost" style="margin-top:10px;font-size:12.5px;padding:9px" onclick="openContactSheet()">패키지 문의하기 →</button>
   </div>`;
 }
 
@@ -3368,6 +3552,38 @@ const ADMIN = {
       ]},
   ],
   selectedChat:'C01',
+
+  // 비즈니스 인사이트 (24개월 누적, 핸드오프 문서 섹션 7 기반)
+  insights:{
+    customers:{
+      total:200,         // 누적 고객
+      onceOnly:91,       // 1회만 이용 후 이탈 (45.5%)
+      returning:109,     // 2회 이상 재방문
+      active:117,        // 현재 계속 이용 중
+      dormant3m:48,      // 3개월 미방문
+      dormant6m:35,      // 6개월 이상 미방문
+    },
+    nationality:{
+      kr:{ count:120, pct:60, revenue:248000000 },
+      vn:{ count:70,  pct:35, revenue:142000000 },
+      jp:{ count:10,  pct:5,  revenue:23000000 },
+    },
+    vipObligation:{
+      totalCharged:611000000,    // 충전 가치 총합
+      totalPaid:413000000,       // 실제 결제
+      currentBalance:142000000,  // 회사 미래 의무
+      memberCount:33,
+    },
+    serviceRevenue:[
+      // 24개월 누적 매출 비중 (시연용 추정)
+      { svc:'grooming', name:'그루밍',     revenue:152000000, pct:36.7, color:'#7a5a3a' },
+      { svc:'hotel',    name:'호텔',       revenue:128000000, pct:30.9, color:'#5a3f6b' },
+      { svc:'spa',      name:'스파(목욕)', revenue:78000000,  pct:18.8, color:'#3f6b52' },
+      { svc:'pool',     name:'수영장',     revenue:32000000,  pct:7.7,  color:'#2f6b7a' },
+      { svc:'daycare',  name:'유치원',     revenue:23000000,  pct:5.5,  color:'#7a6b3a' },
+      { svc:'cafe',     name:'카페·기타',  revenue:2000000,   pct:0.5,  color:'#8a6b4f' },
+    ],
+  },
 };
 
 // 상태 색·라벨
@@ -3439,11 +3655,21 @@ function vAdminDashboard(){
   const pickup = tb.filter(b=>b.pickup).length;
   const byStatus = {};
   tb.forEach(b=>byStatus[b.status]=(byStatus[b.status]||0)+1);
+
+  // 비즈니스 KPI 계산
+  const I = ADMIN.insights;
+  const c = I.customers;
+  const returnRate = ((c.returning / c.total) * 100).toFixed(1);   // 재방문율
+  const churnRate = ((c.onceOnly / c.total) * 100).toFixed(1);     // 1회 이탈률
+  const obligationPct = ((I.vipObligation.currentBalance / I.vipObligation.totalCharged) * 100).toFixed(0);
+
   return `<div class="admhead">
     <div class="ah-l"><div class="ah-t">대시보드</div><div class="ah-s">오늘 (5월 28일 · 목)의 PoshPet</div></div>
     <button class="ah-cta" onclick="goAdmin('bookings')">예약 관리로 →</button>
   </div>
 
+  <!-- 오늘 KPI -->
+  <div class="adm-section-label">오늘</div>
   <div class="kpi4">
     <div class="kpi"><div class="kl">오늘 예약</div><div class="kv">${tb.length}<span>건</span></div></div>
     <div class="kpi"><div class="kl">예상 매출</div><div class="kv">${fmt(revenue)}<span>VND</span></div></div>
@@ -3451,6 +3677,125 @@ function vAdminDashboard(){
     <div class="kpi"><div class="kl">라이브 활성</div><div class="kv">${live}<span>대</span></div></div>
   </div>
 
+  <!-- 비즈니스 인사이트 KPI -->
+  <div class="adm-section-label">비즈니스 인사이트 <span class="adm-section-sub">· 24개월 누적</span></div>
+  <div class="kpi4">
+    <div class="kpi kpi-warn">
+      <div class="kl">1회 이용 이탈</div>
+      <div class="kv">${churnRate}<span>%</span></div>
+      <div class="ks">${c.onceOnly}명 / 총 ${c.total}명 · <b style="color:var(--brown)">핵심 개선 과제</b></div>
+    </div>
+    <div class="kpi kpi-good">
+      <div class="kl">재방문율</div>
+      <div class="kv">${returnRate}<span>%</span></div>
+      <div class="ks">${c.returning}명 재방문 · ${c.active}명 활성 이용</div>
+    </div>
+    <div class="kpi kpi-info">
+      <div class="kl">VIP 잔액 총합</div>
+      <div class="kv">${fmt(Math.round(I.vipObligation.currentBalance/1000000))}<span>M VND</span></div>
+      <div class="ks">${I.vipObligation.memberCount}명 보유 · 회사 미래 의무 ${obligationPct}%</div>
+    </div>
+    <div class="kpi kpi-warn">
+      <div class="kl">휴면 고객</div>
+      <div class="kv">${c.dormant3m}<span>+ ${c.dormant6m}명</span></div>
+      <div class="ks">3개월 미방문 ${c.dormant3m}명 · 6개월+ <b>${c.dormant6m}명 위험</b></div>
+    </div>
+  </div>
+
+  <!-- 신규→재방문 전환 시각화 + 휴면 알림 -->
+  <div class="g2">
+    <div class="card admcard">
+      <div class="cardh">신규 → 재방문 전환 <span class="adm-section-sub">· 24개월 누적</span></div>
+      <div style="padding:14px 18px 16px">
+        <div class="funnel">
+          <div class="fn-row">
+            <span class="fn-l">전체 누적 고객</span>
+            <div class="fn-bar"><div class="fn-fill" style="width:100%;background:var(--brown)"></div><span class="fn-v">${c.total}명</span></div>
+          </div>
+          <div class="fn-row">
+            <span class="fn-l">재방문 (2회 이상)</span>
+            <div class="fn-bar"><div class="fn-fill" style="width:${(c.returning/c.total*100).toFixed(0)}%;background:var(--good)"></div><span class="fn-v">${c.returning}명 (${returnRate}%)</span></div>
+          </div>
+          <div class="fn-row">
+            <span class="fn-l">현재 활성 이용</span>
+            <div class="fn-bar"><div class="fn-fill" style="width:${(c.active/c.total*100).toFixed(0)}%;background:var(--accent)"></div><span class="fn-v">${c.active}명 (${(c.active/c.total*100).toFixed(1)}%)</span></div>
+          </div>
+          <div class="fn-row fn-warn">
+            <span class="fn-l">⚠ 1회 후 이탈</span>
+            <div class="fn-bar"><div class="fn-fill" style="width:${churnRate}%;background:#C44"></div><span class="fn-v">${c.onceOnly}명 (${churnRate}%)</span></div>
+          </div>
+        </div>
+        <div style="background:#FFF1DE;border-radius:10px;padding:10px 13px;margin-top:12px;font-size:11.5px;line-height:1.55;color:var(--brown)">
+          💡 <b>1회 이용 후 이탈률 ${churnRate}%</b> — 첫 방문 다음 자동 쿠폰 / 백신 입고 알림 / 그루밍 다음 추천(5–6주) 같은 재방문 트리거가 필요합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card admcard">
+      <div class="cardh">휴면 고객 알림 <span class="adm-section-sub">· 자동 분류</span></div>
+      <div style="padding:14px 18px 16px">
+        <div class="dorm-card dorm-warn">
+          <div class="dorm-l">
+            <div class="dorm-h">3개월 미방문</div>
+            <div class="dorm-s">마지막 방문 90일 경과</div>
+          </div>
+          <div class="dorm-n">${c.dormant3m}명</div>
+          <button class="dorm-cta" onclick="alert('일괄 메시지 발송 화면 (예정)\\n\\n카톡/Zalo 채널로 ${c.dormant3m}명에게\\n맞춤 인사·재방문 쿠폰 메시지 전송')">메시지 발송</button>
+        </div>
+        <div class="dorm-card dorm-danger">
+          <div class="dorm-l">
+            <div class="dorm-h">6개월 이상 미방문</div>
+            <div class="dorm-s">이탈 위험 · 적극 관리 필요</div>
+          </div>
+          <div class="dorm-n">${c.dormant6m}명</div>
+          <button class="dorm-cta" onclick="alert('일괄 메시지 발송 화면 (예정)\\n\\n카톡/Zalo 채널로 ${c.dormant6m}명에게\\n특별 할인 쿠폰·복귀 인센티브 메시지 전송')">메시지 발송</button>
+        </div>
+        <div style="font-size:11.5px;color:var(--mocha);line-height:1.55;margin-top:10px;padding:0 2px">
+          최근 방문일 기준으로 매일 자동 분류됩니다. 일괄 메시지는 마케팅 동의 고객에게만 발송됩니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 국적별 + 서비스별 매출 분포 -->
+  <div class="g2">
+    <div class="card admcard">
+      <div class="cardh">국적별 매출 분포 <span class="adm-section-sub">· 24개월 누적</span></div>
+      <div style="padding:14px 18px 16px">
+        ${[
+          {key:'kr', label:'🇰🇷 한국', data:I.nationality.kr, color:'#C07A3A'},
+          {key:'vn', label:'🇻🇳 베트남', data:I.nationality.vn, color:'#3F8D52'},
+          {key:'jp', label:'🇯🇵 일본', data:I.nationality.jp, color:'#5A3F8D'},
+        ].map(n=>`
+          <div class="natrow">
+            <div class="nat-h"><span class="nat-l">${n.label}</span><span class="nat-c">${n.data.count}명 · ${n.data.pct}%</span></div>
+            <div class="nat-bar"><div class="nat-fill" style="width:${n.data.pct}%;background:${n.color}"></div></div>
+            <div class="nat-rev">${fmt(Math.round(n.data.revenue/1000000))}M VND</div>
+          </div>`).join('')}
+        <div style="background:var(--cream2);border-radius:10px;padding:10px 13px;margin-top:10px;font-size:11.5px;line-height:1.55;color:var(--mocha)">
+          💡 한국·베트남 양대 고객층 + 일본 소수. 가입 채널(카톡=KR, Zalo=VN)이 자동 분기 시작점입니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card admcard">
+      <div class="cardh">서비스별 매출 분포 <span class="adm-section-sub">· 24개월 누적</span></div>
+      <div style="padding:14px 18px 16px">
+        ${I.serviceRevenue.map(s=>`
+          <div class="svcrow">
+            <div class="svc-h"><span class="svc-l">${s.name}</span><span class="svc-c">${s.pct}%</span></div>
+            <div class="svc-bar"><div class="svc-fill" style="width:${s.pct}%;background:${s.color}"></div></div>
+            <div class="svc-rev">${fmt(Math.round(s.revenue/1000000))}M VND</div>
+          </div>`).join('')}
+        <div style="background:var(--cream2);border-radius:10px;padding:10px 13px;margin-top:10px;font-size:11.5px;line-height:1.55;color:var(--mocha)">
+          💡 그루밍·호텔이 67% — 시그니처 서비스. 수영장·유치원은 차별점이지만 매출 비중 작음 (재방문 트리거로 활용).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오늘 운영 카드 -->
+  <div class="adm-section-label">오늘 운영</div>
   <div class="g2">
     <div class="card admcard">
       <div class="cardh">현재 진행 중·투숙 중</div>
