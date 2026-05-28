@@ -223,7 +223,7 @@
   .calhead{display:flex; justify-content:space-between; align-items:center; padding:6px 6px 12px; font-weight:600; color:var(--brown);}
   .calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
   .dow{font-size:10.5px; color:var(--gray); text-align:center; padding-bottom:6px; font-weight:700;}
-  .day{aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:13.5px;
+  .day{aspect-ratio:1; max-height:52px; display:flex; align-items:center; justify-content:center; font-size:13.5px;
     border-radius:11px; color:var(--ink); position:relative; cursor:pointer;}
   .day.mut{color:#cfc3b3; pointer-events:none;}
   .day.off{color:#d8b5b0; text-decoration:line-through; pointer-events:none;}
@@ -3352,7 +3352,7 @@ const S = {
   d:{ service:null, room:null, dateA:null, dateB:null, time:null, petIds:[],
       pickup:null, addrId:null, phoneId:null, addonAddr:null, addonAddrLabel:null,
       addonPhone:null, addonPhoneLabel:null, notes:'', couponId:null },
-  calMonth:4, calYear:2026, // May 2026
+  calMonth:new Date().getMonth(), calYear:new Date().getFullYear(), // 현재 월로 시작
   prefill:false,
   tourFloor:0,
 };
@@ -5107,20 +5107,23 @@ function stepDates(range){
   return `<div class="qtitle">${range?t('bk.dates.range.title'):t('bk.dates.single.title')}</div>
   <div class="qsub">${range?t('bk.dates.range.sub'):t('bk.dates.single.sub')}</div>
   ${calendar(range)}
-  <div style="height:96px"></div>
+  <div style="height:170px"></div>
   ${range?flowFootStay():flowFoot(!!S.d.dateA,t('bk.dates.next'))}`;
 }
 function calendar(range){
   const y=S.calYear, m=S.calMonth;
   const first=new Date(y,m,1).getDay();
   const days=new Date(y,m+1,0).getDate();
-  const today=new Date(2026,4,27);
+  // 오늘 기준 (실제 현재 날짜). 자정 비교를 위해 시분초 제거
+  const now=new Date(); const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let cells='';
   for(let i=0;i<first;i++) cells+=`<div class="day mut"></div>`;
   for(let d=1; d<=days; d++){
     const dt=new Date(y,m,d);
-    const past = dt < new Date(2026,4,27);
-    const off = (m===4 && (d===18 || d===25)); // some full days
+    const past = dt < today;
+    // 시연용 휴무일: 오늘로부터 +7, +14일 (항상 미래라 자연스러움)
+    const offDays = [new Date(today.getTime()+7*86400000), new Date(today.getTime()+14*86400000)];
+    const off = offDays.some(o=> o.getFullYear()===y && o.getMonth()===m && o.getDate()===d);
     let cls='day';
     if(past||off){ cls+= off?' off':' mut'; }
     const aT=S.d.dateA, bT=S.d.dateB;
@@ -5131,7 +5134,12 @@ function calendar(range){
     } else if(!range && aT && d===aT.d && m===aT.m) cls+=' sel';
     cells+=`<div class="${cls}" onclick="pickDay(${d},${range})">${d}</div>`;
   }
-  const monthLabel = t('bk.month',{y,m:t('bk.mn.'+(m+1))});
+  // 월 라벨: 한국어 "2026년 5월", 영어 "May 2026", 베트남어 "Tháng 5, 2026"
+  const lang = (typeof CURRENT_LANG !== 'undefined' && CURRENT_LANG) ? CURRENT_LANG : 'kr';
+  const mEnNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthLabel = lang==='en' ? `${mEnNames[m]} ${y}`
+                   : lang==='vi' ? `Tháng ${m+1}, ${y}`
+                   : `${y}년 ${m+1}월`;
   return `<div class="cal"><div class="calhead">
       <button class="back" onclick="navMonth(-1)">‹</button>
       <div>${monthLabel}</div>
