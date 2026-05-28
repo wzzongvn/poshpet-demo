@@ -1,4 +1,6 @@
 <!-- PoshPet Mobile Booking Prototype -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -24,8 +26,9 @@
     scroll-behavior:smooth; padding-bottom:96px;}
   .screen::-webkit-scrollbar{width:0;}
 
-  /* 모바일 풀스크린: 좁은 뷰포트에서는 phone 프레임을 풀고 전체 페이지가 뷰포트를 채우게 */
-  @media(max-width:520px){
+  /* 모바일 풀스크린: 폰에서는 phone 프레임을 풀고 전체 페이지가 뷰포트를 채우게 */
+  /* 기준 두 가지: (a) 좁은 뷰포트 (b) 터치 디바이스 — 둘 중 하나만 맞아도 풀스크린 */
+  @media(max-width:820px), (pointer:coarse) and (hover:none){
     body{background:var(--cream2); margin:0;}
     #ppwrap{padding:0; gap:0; display:block;}
     #ppwrap .legend{padding:14px 18px 24px; background:var(--cream); margin-top:14px;}
@@ -743,6 +746,69 @@
   .sublabel{display:flex;align-items:center;}
   .empty-mini{font-size:12px;color:var(--gray);padding:14px;background:var(--cream2);border-radius:11px;text-align:center;}
 
+  /* ===== 백신 UI ===== */
+  /* 백신 상태 배지 */
+  .vaccineBadge{display:inline-block; font-size:10px; font-weight:700; padding:3px 8px; border-radius:30px; white-space:nowrap;}
+  .vaccineBadge.ok{background:#E4F5E7; color:#3F8D52;}
+  .vaccineBadge.partial{background:#FFF1DE; color:#B5793A;}
+  .vaccineBadge.no{background:#FBE7E7; color:#C44;}
+  .vaccineBadge.unknown{background:#EFEAE3; color:var(--gray);}
+
+  /* 펫 등록 시트의 백신 박스 */
+  .vaccineBox{background:var(--cream2); border-radius:13px; padding:12px 14px; margin-bottom:6px;}
+  .vaccineRow{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed var(--line);}
+  .vaccineRow:last-of-type{border-bottom:none;}
+  .vr-name{flex:1; font-size:12.5px; font-weight:600; color:var(--ink);}
+
+  /* 작은 chip 변형 */
+  .chip.sm{padding:5px 10px; font-size:11.5px;}
+
+  /* 펫 카드의 백신 배지 */
+  .pc-vac{margin-top:6px; display:inline-block;}
+  .pc-tr{margin-top:4px; font-size:10px; color:var(--good); font-weight:600;}
+
+  /* 예약 확정 시 백신 안내 카드 */
+  .vaccineNotice{padding:14px 16px; margin-top:12px;}
+  .vaccineNotice.ok{background:#E4F5E7; border-color:#B5DCB8;}
+  .vaccineNotice.ok .vn-h{color:#3F8D52;}
+  .vaccineNotice.warn{background:#FBF1E3; border-color:#F0DDBE;}
+  .vaccineNotice.warn .vn-h{color:var(--warn);}
+  .vn-h{font-weight:700; font-size:13.5px; margin-bottom:5px;}
+  .vn-tx{font-size:12px; color:var(--ink); line-height:1.6;}
+  .vn-pets{display:flex; flex-direction:column; gap:6px; margin-top:10px;}
+  .vn-pet{display:flex; align-items:center; gap:8px; padding:8px 10px; background:#fff; border-radius:10px; cursor:pointer; transition:.15s;}
+  .vn-pet:hover{background:#FFF7EB;}
+  .vn-emoji{font-size:18px;}
+  .vn-nm{flex:1; font-weight:700; font-size:13px; color:var(--brown);}
+  .vn-go{color:var(--accent); font-size:18px; font-weight:700;}
+
+  /* 펫 상세 시트의 백신 카드 */
+  .vaccineCard{padding:14px 16px; margin-top:14px;}
+  .vaccineCard.ok{background:#F5FAF6; border-color:#B5DCB8;}
+  .vaccineCard.partial,
+  .vaccineCard.no{background:#FBF1E3; border-color:#F0DDBE;}
+  .vaccineCard.unknown{background:var(--cream2);}
+  .vc-h{display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:13.5px; color:var(--brown); margin-bottom:8px;}
+  .vc-row{display:flex; justify-content:space-between; align-items:center; font-size:12.5px; padding:5px 0; border-bottom:1px dashed var(--line);}
+  .vc-row:last-of-type{border-bottom:none;}
+  .vc-row span{color:var(--ink);}
+  .vc-row b{font-weight:700;}
+  .vc-row b.ok{color:#3F8D52;}
+  .vc-row b.no{color:#C44;}
+  .vc-row b.unknown{color:var(--gray); font-weight:500;}
+  .vc-note{font-size:11.5px; color:var(--mocha); margin-top:8px; padding:7px 10px; background:#fff; border-radius:9px;}
+  .vc-warn{font-size:11.5px; color:var(--warn); line-height:1.5; margin-top:8px; padding:8px 10px; background:#fff; border-radius:9px;}
+  .traitsCard{padding:13px 14px; margin-bottom:12px; background:#FBF7F0; border:1px solid var(--line);}
+  .traits-tx{font-size:13px; line-height:1.6; color:var(--ink); margin-top:8px; padding:9px 12px; background:#fff; border-radius:9px; white-space:pre-wrap;}
+
+  /* 서비스별 주의사항 카드 */
+  .cautionCard{padding:14px 16px; margin-top:12px; background:#fff; text-align:left;}
+  .cc-h{font-weight:700; font-size:13.5px; color:var(--brown); margin-bottom:8px;}
+  .cc-list{list-style:none; padding:0; margin:0;}
+  .cc-list li{font-size:12px; color:var(--ink); line-height:1.65; padding:5px 0 5px 18px; position:relative; border-bottom:1px dashed var(--line);}
+  .cc-list li:last-child{border-bottom:none;}
+  .cc-list li::before{content:'•'; position:absolute; left:5px; color:var(--accent); font-weight:700;}
+
   /* ---- VIP 카드 tap ---- */
   .vipcard.tap{width:100%;text-align:left;cursor:pointer;transition:.15s;}
   .vipcard.tap:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,47,29,.25);}
@@ -1263,10 +1329,17 @@ function vMyPet(){
 
     <div class="sectitle">내 반려동물</div>
     <div class="gal" style="margin:0 -18px 4px;padding:6px 18px">
-      ${S.pets.map(p=>`<button class="card petcard" onclick="openPetSheet('${p.id}')">
-        <div class="pc-ic">${p.emoji}</div>
-        <div class="pc-nm">${p.name}</div>
-        <div class="pc-sub">${p.breed} · ${WEIGHT_BANDS.find(b=>b.id===p.band)?.label || p.band}</div></button>`).join('')}
+      ${S.pets.map(p=>{
+        const v = vaccinesSummary(p.vaccines);
+        const hasTraits = !!(p.traits && p.traits.trim());
+        return `<button class="card petcard" onclick="openPetSheet('${p.id}')">
+          <div class="pc-ic">${p.emoji}</div>
+          <div class="pc-nm">${p.name}</div>
+          <div class="pc-sub">${p.breed} · ${WEIGHT_BANDS.find(b=>b.id===p.band)?.label || p.band}</div>
+          <div class="pc-vac vaccineBadge ${v.cls}">${v.label}</div>
+          ${hasTraits?'<div class="pc-tr">📋 특이사항 ✓</div>':''}
+        </button>`;
+      }).join('')}
       <button class="card petcard add" onclick="openAddPet(null)">
         <div class="pc-plus">＋</div><div class="pc-nm">새 반려동물</div></button>
     </div>
@@ -1841,6 +1914,8 @@ function openPetSheet(petId){
   const p = S.pets.find(x=>x.id===petId);
   if(!p) return;
   const band = WEIGHT_BANDS.find(b=>b.id===p.band);
+  const v = vaccinesSummary(p.vaccines);
+  const coreLabel = p.species==='dog' ? '종합백신 (DHPPL)' : '종합백신 (FVRCP)';
   // 이 펫의 예약 이력
   const history = S.bookings.filter(b=>b.petIds?.includes(p.id));
   openSheetHTML(`<div class="grab"></div>
@@ -1858,6 +1933,30 @@ function openPetSheet(petId){
         <div class="pd-stat"><div class="ps-n">${history.filter(b=>b.service==='grooming').length}</div><div class="ps-l">그루밍</div></div>
         <div class="pd-stat"><div class="ps-n">${history.filter(b=>b.service==='spa').length}</div><div class="ps-l">스파</div></div>
       </div>
+
+      <!-- 백신 카드 -->
+      <div class="card vaccineCard ${v.cls}">
+        <div class="vc-h">
+          <span>💉 백신 정보</span>
+          <span class="vaccineBadge ${v.cls}">${v.label}</span>
+        </div>
+        <div class="vc-row"><span>광견병 (Rabies)</span><b class="${p.vaccines?.rabies||'unknown'}">${p.vaccines?.rabies==='ok'?'✓ 접종':(p.vaccines?.rabies==='no'?'미접종':'미확인')}</b></div>
+        <div class="vc-row"><span>${coreLabel}</span><b class="${p.vaccines?.core||'unknown'}">${p.vaccines?.core==='ok'?'✓ 접종':(p.vaccines?.core==='no'?'미접종':'미확인')}</b></div>
+        ${p.vaccines?.note?`<div class="vc-note">📌 ${p.vaccines.note}</div>`:''}
+        ${v.ok?'':`<div class="vc-warn">⚠ 호텔·수영장·유치원 이용엔 모든 백신 접종이 필요해요. 정보 수정에서 업데이트하거나 채팅으로 직원에게 알려주세요.</div>`}
+      </div>
+
+      <!-- 특이사항 카드 -->
+      <div class="card traitsCard">
+        <div class="vc-h">
+          <span>📋 특이사항</span>
+          ${p.traits?'<span class="vaccineBadge ok">등록됨</span>':'<span class="vaccineBadge unknown">미등록</span>'}
+        </div>
+        ${p.traits
+          ? `<div class="traits-tx">${p.traits.replace(/\n/g,'<br>')}</div>`
+          : `<div class="vc-warn" style="margin-top:8px">💡 성격·알러지·건강 주의 사항을 등록해두면 직원이 케어 전에 확인합니다.</div>`}
+      </div>
+
       <button class="btn" onclick="openEditPet('${p.id}')">정보 수정</button>
       <button class="btn ghost danger" style="margin-top:8px" onclick="deletePet('${p.id}')">반려동물 삭제</button>
       <button class="btn ghost" style="margin-top:8px" onclick="closeSheet()">닫기</button>
@@ -2471,16 +2570,39 @@ function stepConfirm(s){
         <div class="sumrow"><span class="k" style="color:var(--good)">장기 할인 ${total.rate}%</span><span class="v" style="color:var(--good)">−${fmt(total.discount)}</span></div>`:''}
       <div class="sumrow tot"><span class="k">합계</span><span class="v">${fmt(total.total)} VND</span></div>
     </div>
-    ${s.vaccine?`<div class="card" style="padding:14px;margin-top:12px;background:#FBF1E3;border-color:#F0DDBE">
-      <div style="font-weight:700;font-size:13px;color:var(--warn)">백신 확인 안내</div>
-      <div style="font-size:12px;color:var(--ink);margin-top:5px;line-height:1.5">
-        ${S.vaccineOnFile?'✓ 등록된 백신 정보가 있어요 — 다시 올릴 필요 없어요.':'예약은 지금 완료돼요. 백신 서류는 체크인 전까지 채팅으로 보내주시면 됩니다.'}</div>
-      ${S.vaccineOnFile?'':`<button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="S.vaccineOnFile=true;hint('백신 서류 저장됨 — 다음부터 재사용');render('flow')">지금 올리기 (선택)</button>`}
-    </div>`:''}
+    ${s.vaccine?vaccineNoticeForBooking(S.d.petIds):''}
     <div style="font-size:12px;color:var(--gray);margin-top:12px;text-align:center">결제는 현장 또는 채팅으로 — 예약은 지금 확정됩니다.</div>
   </div>
   <div style="height:96px"></div>
   <div class="flowfoot"><button class="btn" id="flowNext" onclick="submitBooking()">예약 확정하기 →</button></div>`;
+}
+
+// 백신 필요 서비스에서 펫별 백신 상태 안내
+function vaccineNoticeForBooking(petIds){
+  const pets = S.pets.filter(p=>petIds.includes(p.id));
+  if(!pets.length) return '';
+  const allOk = pets.every(p=>vaccinesSummary(p.vaccines).ok);
+  if(allOk){
+    return `<div class="card vaccineNotice ok">
+      <div class="vn-h">✓ 백신 확인 완료</div>
+      <div class="vn-tx">${pets.map(p=>p.name).join(', ')} — 등록된 백신 정보가 있어요. 다시 올릴 필요 없습니다.</div>
+    </div>`;
+  }
+  // 부족한 펫
+  const rows = pets.map(p=>{
+    const v = vaccinesSummary(p.vaccines);
+    return `<div class="vn-pet" onclick="closeFlowSheetIfAny&&closeFlowSheetIfAny();openPetSheet('${p.id}')">
+      <span class="vn-emoji">${p.emoji}</span>
+      <span class="vn-nm">${p.name}</span>
+      <span class="vaccineBadge ${v.cls}">${v.label}</span>
+      <span class="vn-go">›</span>
+    </div>`;
+  }).join('');
+  return `<div class="card vaccineNotice warn">
+    <div class="vn-h">⚠ 백신 확인 안내</div>
+    <div class="vn-tx">이 서비스는 백신 접종이 필요해요. <b>예약은 지금 확정</b>되며, 체크인 전까지 다음 중 하나로 등록해주세요.<br>· 반려동물 카드를 눌러 직접 등록 (아래 ›)<br>· 채팅으로 백신 증명서 사진 전송</div>
+    <div class="vn-pets">${rows}</div>
+  </div>`;
 }
 
 function calcTotal(){
@@ -2492,7 +2614,8 @@ function calcTotal(){
     const discount=Math.round(sub*pct/100);
     return {sub, discount, rate:pct, total:sub-discount};
   }
-  const m=s.menus.find(x=>x.id===S.d.room); const v=parseInt(m.pr.replace(/,/g,''));
+  const m=s.menus.find(x=>x.id===S.d.room);
+  const v = typeof m.pr === 'number' ? m.pr : parseInt(String(m.pr).replace(/,/g,''))||0;
   return {sub:v, discount:0, total:v};
 }
 
@@ -2639,7 +2762,7 @@ function vDone(b){
   const s=SERVICES[b.service];
   return topbar() + `<div class="pad done center" style="padding-top:40px">
     <div class="seal"><svg viewBox="0 0 24 24" width="40" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
-    <div class="sectitle center" style="margin-top:0">예약이 확정됐어요!</div>
+    <div class="sectitle center" style="margin-top:0">${S._lastWasUpdate?'예약이 변경됐어요!':'예약이 확정됐어요!'}</div>
     <div class="seclead center">확인 안내를 ${S.user.channel}로 보내드렸어요.</div>
     <div class="card" style="padding:18px;margin-top:6px">
       <div style="font-size:12px;color:var(--gray)">예약번호</div>
@@ -2654,6 +2777,11 @@ function vDone(b){
         ${b.notes?`<div class="sumrow" style="border:none"><span class="k">요청사항</span><span class="v" style="text-align:right;max-width:60%">${b.notes}</span></div>`:'<div class="sumrow" style="border:none"></div>'}
       </div>
     </div>
+
+    <!-- 백신 + 서비스별 주의사항 -->
+    ${s.vaccine?vaccineNoticeForBooking(b.petIds||[]):''}
+    ${cautionsForService(b.service)}
+
     <div style="background:#FFF1DE;border:1.5px solid #F0DDBE;border-radius:13px;padding:11px 14px;margin-top:14px;font-size:12px;color:var(--brown);line-height:1.5;text-align:left">
       💡 <b>입금 대기 상태</b>입니다. 아래 버튼으로 VietQR 결제하시면 예약이 자동 확정돼요.<br>(정액권 잔액으로도 결제 가능)
     </div>
@@ -2662,6 +2790,45 @@ function vDone(b){
     <button class="btn ghost" style="margin-top:8px" onclick="go('mypet')">마이펫에서 보기</button>
     <div style="font-size:12px;color:var(--gray);margin-top:18px;line-height:1.6">
       💡 다음엔 마이펫에서 <b>"같은 걸로 다시"</b> 한 번이면<br>날짜만 골라 예약이 끝나요.</div>
+  </div>`;
+}
+
+// 서비스별 주의사항·준비물 안내
+function cautionsForService(key){
+  const C = {
+    grooming:[
+      '예약 시간 10분 전 도착 부탁드려요.',
+      '식사는 방문 2시간 전까지 마쳐주세요 (멀미 예방).',
+      '특별히 원하시는 스타일 사진이 있으면 채팅으로 미리 보내주세요.',
+    ],
+    spa:[
+      '식사는 방문 2시간 전까지 마쳐주세요.',
+      '피부·알러지 이력이 있다면 채팅으로 미리 알려주세요.',
+      '약용 샴푸를 원하시면 추가 옵션을 선택해주세요.',
+    ],
+    pool:[
+      '생후 4개월 이상 · 모든 예방접종 완료 필수.',
+      '식사는 방문 2시간 전까지 마쳐주세요.',
+      '안전 동의서는 현장에서 한 번 작성합니다 (다음 방문부터 재사용).',
+      '귀가 예민한 아이는 미리 알려주세요.',
+    ],
+    daycare:[
+      '식사·간식·평소 사용하는 담요가 있으면 가져와주세요.',
+      '사회화 단계별로 그룹을 나눠 운영합니다.',
+      '하원 시간 30분 전 카톡/Zalo로 알림 드려요.',
+    ],
+    hotel:[
+      '체크인 시 비상 연락처 한 번 더 확인합니다.',
+      '평소 사용하는 사료·간식·담요 동반 가능 (추천).',
+      '복용 중인 약이 있다면 라벨링해 가져와주세요.',
+      '투숙 중 실시간 카메라로 확인 가능합니다.',
+      '체크아웃 시간은 11:00 (이후 추가 요금).',
+    ],
+  }[key];
+  if(!C || !C.length) return '';
+  return `<div class="card cautionCard">
+    <div class="cc-h">📌 방문 전 안내</div>
+    <ul class="cc-list">${C.map(t=>`<li>${t}</li>`).join('')}</ul>
   </div>`;
 }
 
@@ -2754,7 +2921,7 @@ function doLogin(provider){
 // ============================ ADD PET SHEET ============================
 function openAddPet(after){
   S._petAfter=after;
-  S._petDraft={species:'dog', breed:null, band:null, name:''};
+  S._petDraft={species:'dog', breed:null, band:null, name:'', vaccines:{ rabies:null, core:null, note:'' }};
   renderPetSheet();
 }
 function renderPetSheet(){
@@ -2764,9 +2931,13 @@ function renderPetSheet(){
     : ['코리안숏헤어','러시안블루','스코티시폴드','페르시안','뱅갈','믹스'];
   const ready = d.name.trim() && d.breed && d.band;
   const isEdit = !!d.editId;
+  if(!d.vaccines) d.vaccines = { rabies:null, core:null, note:'' };
+  // 백신 명칭은 종별로
+  const coreLabel = d.species==='dog' ? '종합백신 (DHPPL)' : '종합백신 (FVRCP)';
+  const vaccineSummary = vaccinesSummary(d.vaccines);
   openSheetHTML(`<div class="grab"></div>
     <div style="font-family:'Fraunces',serif;font-size:21px;color:var(--brown);font-weight:600;padding:0 2px 2px">${isEdit?'반려동물 정보 수정':'반려동물 등록'}</div>
-    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 16px">${isEdit?'이름·품종·체중을 수정할 수 있어요. 변경 사항은 다음 예약부터 자동 적용됩니다.':'예약을 위해 한 번만 등록하면 돼요. 다음 예약부턴 선택만 하면 됩니다.'}</div>
+    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 16px">${isEdit?'이름·품종·체중·백신 정보를 수정할 수 있어요. 변경 사항은 다음 예약부터 자동 적용됩니다.':'예약을 위해 한 번만 등록하면 돼요. 다음 예약부턴 선택만 하면 됩니다.'}</div>
 
     <div class="field" style="padding:0 2px 14px">
       <label>이름</label>
@@ -2785,20 +2956,69 @@ function renderPetSheet(){
     <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 2px 18px">
       ${WEIGHT_BANDS.map(b=>`<button class="chip ${d.band===b.id?'on':''}" style="flex:1 1 calc(33% - 4px);justify-content:center;min-width:0;font-size:12.5px;padding:8px 6px" onclick="S._petDraft.band='${b.id}';renderPetSheet()">${b.label}</button>`).join('')}
     </div>
-    <button class="btn" id="petSave" ${ready?'':'disabled'} onclick="savePet()">${isEdit?'변경사항 저장':'등록하고 계속하기'}</button>
+
+    <!-- 백신 섹션 -->
+    <div style="padding:0 2px 8px;display:flex;align-items:center;gap:6px">
+      <label style="font-size:12.5px;font-weight:600;color:var(--mocha);flex:1">💉 백신 정보 <span style="color:var(--gray);font-weight:400">· 호텔·수영장·유치원 이용 시 필요</span></label>
+      <span class="vaccineBadge ${vaccineSummary.cls}">${vaccineSummary.label}</span>
+    </div>
+    <div class="vaccineBox">
+      <div class="vaccineRow">
+        <span class="vr-name">광견병 (Rabies)</span>
+        <button class="chip sm ${d.vaccines.rabies==='ok'?'on':''}" onclick="setVaccine('rabies','ok')">접종 완료</button>
+        <button class="chip sm ${d.vaccines.rabies==='no'?'on':''}" onclick="setVaccine('rabies','no')">미접종</button>
+      </div>
+      <div class="vaccineRow">
+        <span class="vr-name">${coreLabel}</span>
+        <button class="chip sm ${d.vaccines.core==='ok'?'on':''}" onclick="setVaccine('core','ok')">접종 완료</button>
+        <button class="chip sm ${d.vaccines.core==='no'?'on':''}" onclick="setVaccine('core','no')">미접종</button>
+      </div>
+      <div class="field" style="padding:8px 0 0">
+        <label style="font-size:11px">메모 <span style="color:var(--gray)">(선택 · 접종일·동물병원 등)</span></label>
+        <input placeholder="예: 2026-03-15 하노이 동물병원" value="${d.vaccines.note||''}" oninput="S._petDraft.vaccines.note=this.value">
+      </div>
+      <div style="font-size:11px;color:var(--gray);margin-top:8px;line-height:1.5">📷 백신 증명서 사진은 첫 예약 시 채팅으로 보내주시면 직원이 확인 후 영구 저장합니다.</div>
+    </div>
+
+    <!-- 특이사항 섹션 -->
+    <div style="padding:14px 2px 6px"><label style="font-size:12.5px;font-weight:600;color:var(--mocha)">📋 특이사항 <span style="color:var(--gray);font-weight:400">· 성격·건강·주의 사항</span></label></div>
+    <div class="field" style="padding:0">
+      <textarea placeholder="예: 낯선 강아지에 예민해요 · 왼쪽 귀 청력 약함 · 닭고기 알러지 · 천둥 무서워함 등" 
+        oninput="S._petDraft.traits=this.value" 
+        style="resize:none;font-family:inherit;width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;font-size:13.5px;line-height:1.5;min-height:72px">${d.traits||''}</textarea>
+      <div style="font-size:11px;color:var(--gray);margin-top:6px;line-height:1.5">한 번 등록하면 모든 예약에 자동 반영돼요. 직원이 케어 전에 확인합니다.</div>
+    </div>
+
+    <button class="btn" id="petSave" style="margin-top:14px" ${ready?'':'disabled'} onclick="savePet()">${isEdit?'변경사항 저장':'등록하고 계속하기'}</button>
     <div class="center" style="font-size:11px;color:var(--gray);margin-top:12px">생일·중성화 등은 나중에 추가하면 돼요.</div>
   `);
+}
+function setVaccine(kind, val){
+  if(!S._petDraft.vaccines) S._petDraft.vaccines={rabies:null,core:null,note:''};
+  S._petDraft.vaccines[kind] = val;
+  renderPetSheet();
+}
+// 한 펫의 백신 상태 요약
+function vaccinesSummary(v){
+  if(!v) return { cls:'unknown', label:'미확인', ok:false };
+  const ok = v.rabies==='ok' && v.core==='ok';
+  if(ok) return { cls:'ok', label:'✓ 모두 접종', ok:true };
+  if(v.rabies==='no' || v.core==='no') return { cls:'no', label:'⚠ 미접종 있음', ok:false };
+  if(v.rabies==='ok' || v.core==='ok') return { cls:'partial', label:'일부 접종', ok:false };
+  return { cls:'unknown', label:'미확인', ok:false };
 }
 function refreshPetReady(){ const d=S._petDraft; const b=$('petSave');
   if(b) b.disabled=!(d.name.trim()&&d.breed&&d.band); }
 function savePet(){
   const d=S._petDraft;
   const emoji = d.species==='dog'?'🐶':'🐱';
+  const vaccines = d.vaccines || {rabies:null, core:null, note:''};
+  const traits = (d.traits||'').trim();  // 특이사항
   // 편집 모드: 기존 펫 업데이트
   if(d.editId){
     const idx = S.pets.findIndex(p=>p.id===d.editId);
     if(idx>=0){
-      S.pets[idx] = { ...S.pets[idx], name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji };
+      S.pets[idx] = { ...S.pets[idx], name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji, vaccines, traits };
       closeSheet();
       hint(`${d.name} 정보 수정 완료`);
       render('mypet');
@@ -2806,7 +3026,7 @@ function savePet(){
     }
   }
   // 신규 등록
-  const pet={ id:'p'+Date.now(), name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji };
+  const pet={ id:'p'+Date.now(), name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji, vaccines, traits };
   S.pets.push(pet);
   closeSheet();
   const after=S._petAfter;
