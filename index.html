@@ -12,6 +12,9 @@
     --radius:22px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  /* iOS의 '더 큰 텍스트(Dynamic Type)'·자동 글씨 확대로 레이아웃이 깨지지 않도록 고정.
+     사용자가 OS에서 글씨를 키워도 앱 내부 폰트는 디자인 기준 크기를 유지한다. */
+  html{-webkit-text-size-adjust:100%; text-size-adjust:100%;}
   #ppwrap{font-family:'Plus Jakarta Sans','Noto Sans KR','Noto Sans CJK KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; color:var(--ink);
     display:flex; gap:30px; align-items:flex-start; justify-content:center;
     padding:24px 12px 40px; flex-wrap:wrap;}
@@ -223,7 +226,7 @@
   .calhead{display:flex; justify-content:space-between; align-items:center; padding:6px 6px 12px; font-weight:600; color:var(--brown);}
   .calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
   .dow{font-size:10.5px; color:var(--gray); text-align:center; padding-bottom:6px; font-weight:700;}
-  .day{aspect-ratio:1; max-height:42px; display:flex; align-items:center; justify-content:center; font-size:13.5px;
+  .day{height:40px; max-height:40px; display:flex; align-items:center; justify-content:center; font-size:13.5px;
     border-radius:11px; color:var(--ink); position:relative; cursor:pointer;}
   .day.mut{color:#cfc3b3; pointer-events:none;}
   .day.off{color:#d8b5b0; text-decoration:line-through; pointer-events:none;}
@@ -5168,7 +5171,7 @@ function stepDates(range){
   return `<div class="qtitle">${range?t('bk.dates.range.title'):t('bk.dates.single.title')}</div>
   <div class="qsub">${range?t('bk.dates.range.sub'):t('bk.dates.single.sub')}</div>
   ${calendar(range)}
-  <div style="height:170px"></div>
+  <div style="height:210px"></div>
   ${range?flowFootStay():flowFoot(!!S.d.dateA,t('bk.dates.next'))}`;
 }
 function calendar(range){
