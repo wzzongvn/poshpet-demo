@@ -743,6 +743,43 @@
     display:flex;align-items:center;justify-content:center;font-size:13px;}
   .iconbtn:hover{background:var(--cream2);border-color:var(--mochaSoft);}
   .addlink{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--accent);background:transparent;padding:3px 8px;}
+
+  /* ---- progressive disclosure: profile boost ---- */
+  .boostCard{background:linear-gradient(135deg,#FFF7EB,#FAEFE0); border:1.5px solid #EBD9BD;
+    border-radius:16px; padding:14px 16px; margin-top:14px; cursor:pointer; transition:.15s;
+    text-align:left; width:100%;}
+  .boostCard:hover{transform:translateY(-1px); box-shadow:0 6px 20px rgba(74,47,29,.12);}
+  .boostHead{display:flex; align-items:center; gap:11px;}
+  .boostEmoji{font-size:24px; flex-shrink:0;}
+  .boostText{flex:1; min-width:0;}
+  .boostTitle{font-weight:700; font-size:14px; color:var(--brown);}
+  .boostSub{font-size:11.5px; color:var(--mocha); margin-top:2px; line-height:1.5;}
+  .boostGo{font-size:20px; color:var(--accent); font-weight:300; flex-shrink:0;}
+  .boostLater{background:transparent; font-size:11.5px; color:var(--gray); padding:5px 10px;
+    margin-top:8px; display:block; text-decoration:underline;}
+  .boostLater:hover{color:var(--mocha);}
+
+  /* boost sheet sections */
+  .boostSection{background:var(--cream2); border-radius:14px; padding:13px 14px;}
+  .boostSectionTitle{font-family:'Fraunces',serif; font-size:16px; color:var(--brown); font-weight:600;}
+  .chipRow{display:flex; gap:6px; flex-wrap:wrap;}
+  .chipRow .chip{flex:0 0 auto;}
+  .optional{font-weight:500; color:var(--gray); font-size:11px; margin-left:4px;}
+  .photoRow{display:flex; align-items:center; gap:11px;}
+  .photoPreview{width:54px; height:54px; border-radius:50%; background:var(--cream); border:2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0;}
+  .photoPreview.empty{opacity:.5;}
+
+  /* boost mini card (info edit sheet) */
+  .boostMini{display:flex; align-items:center; gap:10px; padding:11px 13px; margin-top:12px;
+    background:linear-gradient(135deg,#FFF7EB,#FAEFE0); border:1.5px solid #EBD9BD;
+    border-radius:13px; width:100%; text-align:left;}
+  .boostMiniIc{font-size:22px; flex-shrink:0;}
+  .boostMiniTx{flex:1; min-width:0;}
+  .boostMiniTx b{display:block; font-size:13px; font-weight:700; color:var(--brown);}
+  .boostMiniTx i{font-style:normal; font-size:11px; color:var(--mocha); margin-top:1px; display:block;}
+  .boostBar{width:60px; height:5px; background:#fff; border-radius:30px; overflow:hidden; flex-shrink:0;}
+  .boostBarFill{height:100%; background:var(--accent); transition:width .3s;}
   .sublabel{display:flex;align-items:center;}
   .empty-mini{font-size:12px;color:var(--gray);padding:14px;background:var(--cream2);border-radius:11px;text-align:center;}
 
@@ -1983,6 +2020,15 @@ function deletePet(petId){
 // 정보 수정 (이름·연락처·주소·전화번호 일괄)
 // ============================================================================
 function openProfileEdit(){
+  // 추가 정보 완성도 계산
+  const u = S.user || {};
+  const userFilled = [u.country, u.gender, u.birthday, u.marketingOptIn!==null].filter(Boolean).length;
+  const petFilled = S.pets.reduce((a,p)=>a + [p.gender, p.birthday, p.photo].filter(Boolean).length, 0);
+  const petTotal = S.pets.length * 3;
+  const filled = userFilled + petFilled;
+  const total = 4 + petTotal;
+  const pct = total>0 ? Math.round(filled/total*100) : 0;
+
   openSheetHTML(`<div class="grab"></div>
     <div style="font-family:'Fraunces',serif;font-size:21px;color:var(--brown);font-weight:600;padding:0 2px 2px">정보 수정</div>
     <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">이름·연락처·저장된 주소와 번호를 관리할 수 있어요.</div>
@@ -1996,6 +2042,17 @@ function openProfileEdit(){
       <label>가입 채널 (변경 불가)</label>
       <input value="${S.user?.contact||''} · ${S.user?.channel||''}" disabled style="background:var(--cream2);color:var(--gray)">
     </div>
+
+    <!-- 추가 정보 권유 (국적·성별·생일·마케팅 동의 + 펫 추가 정보) -->
+    <button class="boostMini" onclick="openProfileBoost()">
+      <span class="boostMiniIc">💝</span>
+      <div class="boostMiniTx">
+        <b>추가 정보 ${pct}% 완성</b>
+        <i>국적·성별·생일·마케팅 동의 / 펫 생일·사진 등</i>
+      </div>
+      <div class="boostBar"><div class="boostBarFill" style="width:${pct}%"></div></div>
+      <span class="boostGo">›</span>
+    </button>
 
     <div class="sublabel" style="margin-top:18px">전화번호 (${S.phones.length}개) <button class="addlink" onclick="addPhoneInline()">+ 추가</button></div>
     <div class="savedlist">
@@ -2782,6 +2839,9 @@ function vDone(b){
     ${s.vaccine?vaccineNoticeForBooking(b.petIds||[]):''}
     ${cautionsForService(b.service)}
 
+    <!-- 첫 예약 후 추가 정보 권유 (모두 선택, 미응답 시 더 이상 묻지 않음) -->
+    ${shouldShowProfileBoost(b) ? renderProfileBoostCard() : ''}
+
     <div style="background:#FFF1DE;border:1.5px solid #F0DDBE;border-radius:13px;padding:11px 14px;margin-top:14px;font-size:12px;color:var(--brown);line-height:1.5;text-align:left">
       💡 <b>입금 대기 상태</b>입니다. 아래 버튼으로 VietQR 결제하시면 예약이 자동 확정돼요.<br>(정액권 잔액으로도 결제 가능)
     </div>
@@ -2791,6 +2851,176 @@ function vDone(b){
     <div style="font-size:12px;color:var(--gray);margin-top:18px;line-height:1.6">
       💡 다음엔 마이펫에서 <b>"같은 걸로 다시"</b> 한 번이면<br>날짜만 골라 예약이 끝나요.</div>
   </div>`;
+}
+
+// ========== 점진적 정보 수집 (Progressive Disclosure) ==========
+// 첫 예약 후, 미입력 정보가 있고 아직 권유받지 않은 경우에만 안내 카드 표시.
+// "나중에" 누르면 영구히 다시 묻지 않음 (사용자 의사 존중).
+function shouldShowProfileBoost(b){
+  if(S._lastWasUpdate) return false;       // 변경 예약에선 안 보임
+  if(S.profileBoostShown) return false;    // 이미 한 번 응답 (예/나중에)
+  // 채워질 정보가 있는지 확인
+  const u = S.user || {};
+  const userMissing = !u.country || !u.gender || !u.birthday || u.marketingOptIn===null;
+  const petMissing = (b.petIds||[]).some(id=>{
+    const p = S.pets.find(x=>x.id===id);
+    return p && (!p.gender || !p.birthday || !p.photo);
+  });
+  return userMissing || petMissing;
+}
+function renderProfileBoostCard(){
+  return `<div class="boostCard" onclick="openProfileBoost()">
+    <div class="boostHead">
+      <span class="boostEmoji">💝</span>
+      <div class="boostText">
+        <div class="boostTitle">더 좋은 케어를 위한 추가 정보</div>
+        <div class="boostSub">반려동물 생일·사진과 본인 정보 — 1분이면 끝, 모두 선택 입력</div>
+      </div>
+      <span class="boostGo">›</span>
+    </div>
+    <button class="boostLater" onclick="event.stopPropagation();dismissProfileBoost()">나중에 할게요</button>
+  </div>`;
+}
+function dismissProfileBoost(){
+  S.profileBoostShown = true;
+  hint('마이펫 → 정보 수정에서 언제든 등록할 수 있어요');
+  // done 화면에선 DOM에서 카드만 즉시 제거 (전체 재렌더하면 booking 컨텍스트 잃음)
+  const card = document.querySelector('.boostCard');
+  if(card) card.remove();
+}
+
+// 추가 정보 시트 (예약 후 권유 + 마이펫에서 직접 진입)
+function openProfileBoost(){
+  S.profileBoostShown = true;
+  // 임시 편집 상태
+  S._boostDraft = {
+    user: {
+      country: S.user?.country || null,
+      gender: S.user?.gender || null,
+      birthday: S.user?.birthday || '',
+      marketingOptIn: S.user?.marketingOptIn,
+    },
+    pets: S.pets.map(p=>({
+      id:p.id, name:p.name, emoji:p.emoji,
+      gender: p.gender || null,
+      birthday: p.birthday || '',
+      photo: p.photo || null,
+    })),
+  };
+  renderProfileBoostSheet();
+}
+function renderProfileBoostSheet(){
+  const d = S._boostDraft;
+  openSheetHTML(`<div class="grab"></div>
+    <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--brown);font-weight:600;padding:0 2px 2px">💝 추가 정보</div>
+    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">모두 선택 입력입니다 — 채우는 만큼 더 맞춤 케어를 제공할 수 있어요.</div>
+
+    <!-- 본인 정보 -->
+    <div class="boostSection">
+      <div class="boostSectionTitle">👤 본인 정보</div>
+
+      <div class="field" style="padding:0;margin-top:8px">
+        <label>국적</label>
+        <div class="chipRow">
+          ${[['KR','🇰🇷 한국'],['VN','🇻🇳 베트남'],['JP','🇯🇵 일본'],['OTHER','🌐 기타']].map(([k,l])=>
+            `<button class="chip ${d.user.country===k?'on':''}" onclick="S._boostDraft.user.country='${k}';renderProfileBoostSheet()">${l}</button>`
+          ).join('')}
+        </div>
+      </div>
+
+      <div class="field" style="padding:0;margin-top:10px">
+        <label>성별</label>
+        <div class="chipRow">
+          ${[['F','여성'],['M','남성'],['O','선택 안 함']].map(([k,l])=>
+            `<button class="chip ${d.user.gender===k?'on':''}" onclick="S._boostDraft.user.gender='${k}';renderProfileBoostSheet()">${l}</button>`
+          ).join('')}
+        </div>
+      </div>
+
+      <div class="field" style="padding:0;margin-top:10px">
+        <label>생년월일 <span class="optional">(생일 쿠폰 등을 위해)</span></label>
+        <input type="date" value="${d.user.birthday||''}" oninput="S._boostDraft.user.birthday=this.value">
+      </div>
+
+      <div class="field" style="padding:0;margin-top:10px">
+        <label>마케팅 동의</label>
+        <div class="chipRow">
+          <button class="chip ${d.user.marketingOptIn===true?'on':''}" onclick="S._boostDraft.user.marketingOptIn=true;renderProfileBoostSheet()">✓ 동의 (할인·이벤트 안내 받기)</button>
+          <button class="chip ${d.user.marketingOptIn===false?'on':''}" onclick="S._boostDraft.user.marketingOptIn=false;renderProfileBoostSheet()">동의 안 함</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 펫 추가 정보 -->
+    ${d.pets.map((p,i)=>renderBoostPetSection(p,i)).join('')}
+
+    <button class="btn" style="margin-top:14px" onclick="saveProfileBoost()">저장</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="closeSheet();render(S.view)">건너뛰기</button>
+  `);
+}
+function renderBoostPetSection(p, i){
+  return `<div class="boostSection" style="margin-top:14px">
+    <div class="boostSectionTitle">${p.emoji} ${p.name}</div>
+
+    <div class="field" style="padding:0;margin-top:8px">
+      <label>성별</label>
+      <div class="chipRow">
+        ${[['M','수컷'],['F','암컷'],['NM','중성화 수컷'],['NF','중성화 암컷']].map(([k,l])=>
+          `<button class="chip ${p.gender===k?'on':''}" onclick="S._boostDraft.pets[${i}].gender='${k}';renderProfileBoostSheet()">${l}</button>`
+        ).join('')}
+      </div>
+    </div>
+
+    <div class="field" style="padding:0;margin-top:10px">
+      <label>생일 <span class="optional">(생일 케이크·기념일 케어)</span></label>
+      <input type="date" value="${p.birthday||''}" oninput="S._boostDraft.pets[${i}].birthday=this.value">
+    </div>
+
+    <div class="field" style="padding:0;margin-top:10px">
+      <label>프로필 사진 <span class="optional">(직원이 알아보기 쉽도록)</span></label>
+      <div class="photoRow">
+        ${p.photo ? `<div class="photoPreview">${p.photo.length<6?p.photo:'📷'}</div>` : `<div class="photoPreview empty">${p.emoji}</div>`}
+        <button class="btn ghost sm" onclick="pickPetPhoto(${i})">📷 사진 선택</button>
+      </div>
+    </div>
+  </div>`;
+}
+// 시연용 사진 선택 (실제로는 파일 업로드 다이얼로그)
+function pickPetPhoto(petIdx){
+  const emojis = ['🐶','🐕','🦮','🐕‍🦺','🐩','🐱','🐈','🐈‍⬛'];
+  const cur = S._boostDraft.pets[petIdx].photo;
+  const idx = emojis.indexOf(cur);
+  const next = emojis[(idx+1) % emojis.length];
+  S._boostDraft.pets[petIdx].photo = next;
+  renderProfileBoostSheet();
+}
+function saveProfileBoost(){
+  const d = S._boostDraft;
+  // 본인 정보 머지 (null/빈값은 기존 유지)
+  S.user = {
+    ...S.user,
+    country: d.user.country ?? S.user?.country,
+    gender:  d.user.gender ?? S.user?.gender,
+    birthday: d.user.birthday || S.user?.birthday,
+    marketingOptIn: d.user.marketingOptIn,
+  };
+  // 펫 정보 머지
+  d.pets.forEach(bp=>{
+    const idx = S.pets.findIndex(p=>p.id===bp.id);
+    if(idx>=0){
+      S.pets[idx] = {
+        ...S.pets[idx],
+        gender:   bp.gender   || S.pets[idx].gender,
+        birthday: bp.birthday || S.pets[idx].birthday,
+        photo:    bp.photo    || S.pets[idx].photo,
+      };
+    }
+  });
+  S._boostDraft = null;
+  hint('✓ 정보 저장됨 — 마이펫에서 언제든 수정할 수 있어요');
+  closeSheet();
+  // 마이펫으로 안전하게 이동 (done 화면에서 호출됐을 수 있어서 booking 컨텍스트 없을 수도 있음)
+  go('mypet');
 }
 
 // 서비스별 주의사항·준비물 안내
@@ -2894,13 +3124,19 @@ function openPhone(){
 
 function doLogin(provider){
   S.loggedIn=true;
+  // 채널 기반 국적 자동 추론 (Kakao → 한국, Zalo → 베트남, 나머지는 미설정)
   const profiles={
-    Google:{name:'지현', contact:'you@gmail.com', channel:'이메일', phoneAuto:'010-1234-5678'},
-    Zalo:  {name:'Minh', contact:'Zalo @minh',    channel:'Zalo',   phoneAuto:'0901 234 567'},
-    Kakao: {name:'지현', contact:'카톡 @jhpark',   channel:'카카오톡', phoneAuto:'010-9876-5432'},
-    Phone: {name:'회원', contact:S._phone||'010-····-····', channel:'문자(SMS)', phoneAuto:S._phone||'010-0000-0000'},
+    Google:{name:'지현', contact:'you@gmail.com', channel:'이메일',   phoneAuto:'010-1234-5678', country:'KR'},
+    Zalo:  {name:'Minh', contact:'Zalo @minh',    channel:'Zalo',     phoneAuto:'0901 234 567',  country:'VN'},
+    Kakao: {name:'지현', contact:'카톡 @jhpark',   channel:'카카오톡',  phoneAuto:'010-9876-5432', country:'KR'},
+    Phone: {name:'회원', contact:S._phone||'010-····-····', channel:'문자(SMS)', phoneAuto:S._phone||'010-0000-0000', country:null},
   };
-  S.user=profiles[provider];
+  S.user = {
+    ...profiles[provider],
+    gender: null,            // 가입 직후 비어있음 — 나중에 선택 입력
+    birthday: null,
+    marketingOptIn: null,    // null = 미선택, true/false = 응답
+  };
   // 가입 직후 본인 전화번호를 default 연락처로 자동 저장
   if(S.phones.length===0 && S.user.phoneAuto){
     S.phones.push({ id:'ph'+Date.now(), label:'본인', number:S.user.phoneAuto, isDefault:true });
@@ -3013,20 +3249,31 @@ function savePet(){
   const d=S._petDraft;
   const emoji = d.species==='dog'?'🐶':'🐱';
   const vaccines = d.vaccines || {rabies:null, core:null, note:''};
-  const traits = (d.traits||'').trim();  // 특이사항
-  // 편집 모드: 기존 펫 업데이트
+  const traits = (d.traits||'').trim();
+  // 편집 모드: 기존 펫 업데이트 (gender·birthday·photo 등 추가 필드 유지)
   if(d.editId){
     const idx = S.pets.findIndex(p=>p.id===d.editId);
     if(idx>=0){
-      S.pets[idx] = { ...S.pets[idx], name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji, vaccines, traits };
+      S.pets[idx] = {
+        ...S.pets[idx],
+        name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji, vaccines, traits,
+        // 편집 모드에서 변경된 추가 정보가 있으면 반영, 없으면 기존 값 유지
+        gender:  d.gender   !== undefined ? d.gender   : S.pets[idx].gender,
+        birthday:d.birthday !== undefined ? d.birthday : S.pets[idx].birthday,
+        photo:   d.photo    !== undefined ? d.photo    : S.pets[idx].photo,
+      };
       closeSheet();
       hint(`${d.name} 정보 수정 완료`);
       render('mypet');
       return;
     }
   }
-  // 신규 등록
-  const pet={ id:'p'+Date.now(), name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji, vaccines, traits };
+  // 신규 등록 — 가입·예약 흐름에선 추가 정보는 비워두고 나중에 권유
+  const pet={
+    id:'p'+Date.now(), name:d.name.trim(), species:d.species, breed:d.breed, band:d.band, emoji,
+    vaccines, traits,
+    gender:null, birthday:null, photo:null,    // 추가 정보 슬롯 (나중에 채움)
+  };
   S.pets.push(pet);
   closeSheet();
   const after=S._petAfter;
