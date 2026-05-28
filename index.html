@@ -292,6 +292,10 @@
   .social.g{border-color:#dadce0;}
   .social.z{background:#0068FF; color:#fff; border-color:#0068FF;}
   .social svg{width:22px;height:22px;}
+  .authmore{display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    padding:11px; border-radius:13px; font-weight:600; font-size:13px; color:var(--mocha);
+    background:transparent; border:1.5px dashed var(--line); cursor:pointer;}
+  .authmore:hover{background:var(--cream); border-color:var(--accent);}
 
   /* done */
   .done .seal{width:84px;height:84px;border-radius:50%; background:var(--good);
@@ -300,11 +304,12 @@
   .code{font-family:'Fraunces',serif; font-size:30px; font-weight:600; letter-spacing:2px; color:var(--brown);}
 
   /* reuse card */
-  .reuse{padding:14px; margin-bottom:11px; display:flex; gap:13px; align-items:center;}
-  .reuse .av{width:46px;height:46px;border-radius:14px; background:var(--cream); display:flex;
-    align-items:center;justify-content:center; font-size:22px; flex-shrink:0;}
-  .reuse .rt{font-weight:700; font-size:14.5px;} .reuse .rd{font-size:11.5px; color:var(--gray); margin-top:2px;}
-  .reuse .rs{font-size:11px; color:var(--good); font-weight:700; margin-top:3px;}
+  .reuse{padding:9px 12px; margin-bottom:7px; display:flex; gap:10px; align-items:center;}
+  .reuse .av{width:34px;height:34px;border-radius:10px; background:var(--cream); display:flex;
+    align-items:center;justify-content:center; font-size:17px; flex-shrink:0;}
+  .reuse .rt{font-weight:700; font-size:13px; line-height:1.25;} .reuse .rd{font-size:10.5px; color:var(--gray); margin-top:1px;}
+  .reuse .rs{font-size:10px; color:var(--good); font-weight:700; margin-top:1px;}
+  .reuse .starbtn{font-size:15px;} .reuse .btn.sm{padding:7px 12px; font-size:12px;}
 
   .pophint{position:absolute; bottom:88px; left:14px; right:14px; z-index:55; background:var(--brown);
     color:#fff; border-radius:16px; padding:13px 15px; font-size:12.5px; box-shadow:var(--shadow);
@@ -1520,6 +1525,7 @@ const I18N = {
   'more.faq.t':         {kr:'자주 묻는 질문', vi:'Câu hỏi thường gặp',  en:'FAQ'},
   'more.faq.s':         {kr:'운영·가격·픽업', vi:'Vận hành · Giá · Đưa đón', en:'Hours · Pricing · Pickup'},
   'more.logout':        {kr:'로그아웃',      vi:'Đăng xuất',          en:'Sign Out'},
+  'toast.loggedOut':    {kr:'로그아웃됐어요',  vi:'Đã đăng xuất',       en:'Signed out'},
   'more.footer':        {kr:'BT6-23, Khu Ngoại giao đoàn, Hanoi<br>08:00–20:00 · 365일',
                          vi:'BT6-23, Khu Ngoại giao đoàn, Hà Nội<br>08:00–20:00 · 365 ngày',
                          en:'BT6-23, Diplomatic Quarter, Hanoi<br>08:00–20:00 · 365 days'},
@@ -1635,6 +1641,7 @@ const I18N = {
   'done.payCta':        {kr:'📱 QR 결제하기 →', vi:'📱 Thanh toán QR →', en:'📱 Pay via QR →'},
   'done.chatCta':       {kr:'채팅으로 문의하기', vi:'Chat hỗ trợ',     en:'Chat with us'},
   'done.viewMy':        {kr:'마이펫에서 보기', vi:'Xem ở MyPet',      en:'View in MyPet'},
+  'done.editCta':       {kr:'✏️ 이 예약 수정하기', vi:'✏️ Sửa đặt lịch này', en:'✏️ Edit this booking'},
   'done.tip':           {kr:'💡 다음엔 마이펫에서 <b>"같은 걸로 다시"</b> 한 번이면<br>날짜만 골라 예약이 끝나요.',
                          vi:'💡 Lần sau chỉ cần bấm <b>"Đặt lại như cũ"</b> trong MyPet,<br>chọn ngày là xong.',
                          en:'💡 Next time, just hit <b>"Book same again"</b> in MyPet —<br>pick a date and you\'re done.'},
@@ -1697,6 +1704,10 @@ const I18N = {
 
   // ===== 정기배송 (Subscribe) =====
   'sub.title':          {kr:'정기 배송',   vi:'Đặt định kỳ',      en:'Subscription'},
+  'home.subs.t':        {kr:'정기 배송',   vi:'Giao hàng định kỳ', en:'Subscription'},
+  'home.subs.s':        {kr:'사료·모래·간식을 원하는 주기로 자동 배송',
+                         vi:'Tự động giao thức ăn·cát·bánh thưởng theo chu kỳ',
+                         en:'Auto-deliver food, litter & treats on schedule'},
   'sub.lead':           {kr:'사료·모래·간식을 원하는 주기로 자동 배송받으세요.',
                          vi:'Nhận thức ăn, cát, bánh thưởng theo chu kỳ tự động.',
                          en:'Auto-deliver food, litter, treats on your schedule.'},
@@ -1975,6 +1986,10 @@ const I18N = {
                          en:'☕ Café is <b>walk-in only</b> — no booking needed.<br>1F lounge for owners to relax.'},
   'svcpick.fromPrice':  {kr:'시작가 {p} VND~', vi:'Từ {p} VND~', en:'From {p} VND~'},
   'svcpick.hotelPrice': {kr:'1박 {p} VND~', vi:'1 đêm {p} VND~', en:'Per night {p} VND~'},
+  // R6: 기존 예약 있을 때 최근 예약 바로가기
+  'svcpick.recentHead': {kr:'최근 예약', vi:'Đặt lịch gần đây', en:'Recent booking'},
+  'svcpick.recentTap':  {kr:'전체 예약 현황 보기 →', vi:'Xem tất cả lịch đặt →', en:'View all bookings →'},
+  'svcpick.newHead':    {kr:'새로 예약하기', vi:'Đặt lịch mới', en:'New booking'},
 
   // ===== VIP 시트 =====
   'vipsheet.title':     {kr:'VIP 정액권', vi:'Gói VIP', en:'VIP Membership'},
@@ -2077,6 +2092,26 @@ const I18N = {
   'auth.welcome':       {kr:'{provider} 계정으로 가입 완료!',
                          vi:'Đăng ký xong bằng {provider}!',
                          en:'Signed up with {provider}!'},
+  'auth.welcomeBack':   {kr:'{provider}으로 로그인했어요!',
+                         vi:'Đã đăng nhập bằng {provider}!',
+                         en:'Signed in with {provider}!'},
+  // R2: 로그인 vs 가입 구분
+  'auth.titleLogin':    {kr:'다시 오셨네요',             vi:'Chào mừng trở lại',           en:'Welcome back'},
+  'auth.leadLogin':     {kr:'이전에 사용하신 방법으로 로그인하세요.',
+                         vi:'Đăng nhập bằng phương thức bạn đã dùng.',
+                         en:'Sign in with the method you used before.'},
+  'auth.afterLogin':    {kr:'기존 정보를 그대로 불러와요.',
+                         vi:'Khôi phục thông tin của bạn.',
+                         en:'Your info will be restored.'},
+  // R3: 로그인 수단 기억
+  'auth.lastUsed':      {kr:'최근 사용',                  vi:'Đã dùng gần đây',             en:'Last used'},
+  'auth.continueWith':  {kr:'{provider}으로 계속하기',    vi:'Tiếp tục với {provider}',     en:'Continue with {provider}'},
+  'auth.otherMethods':  {kr:'다른 방법으로 로그인',        vi:'Đăng nhập cách khác',          en:'Other sign-in methods'},
+  'auth.otherMethodsHide':{kr:'접기',                    vi:'Thu gọn',                     en:'Hide'},
+  'auth.provName.Google':{kr:'Google',  vi:'Google',     en:'Google'},
+  'auth.provName.Phone': {kr:'전화번호', vi:'Số điện thoại', en:'Phone'},
+  'auth.provName.Kakao': {kr:'카카오톡', vi:'KakaoTalk',  en:'KakaoTalk'},
+  'auth.provName.Zalo':  {kr:'Zalo',     vi:'Zalo',       en:'Zalo'},
 
   // ===== 결제 시트 (paysheet.*, paychoice.*) =====
   'paysheet.bookTitle': {kr:'예약 결제',                  vi:'Thanh toán đặt lịch',         en:'Booking payment'},
@@ -3355,6 +3390,7 @@ const S = {
   calMonth:new Date().getMonth(), calYear:new Date().getFullYear(), // 현재 월로 시작
   prefill:false,
   tourFloor:0,
+  _lastProvider:null,        // R3: 마지막 로그인 수단 기억 (실개발은 localStorage)
 };
 
 // 체중 구간 (7단계) — 펫 등록 시 칩으로 선택, 예약 시 자동 적용
@@ -3685,6 +3721,11 @@ function vHome(){
       <span class="wt"><b>${t('home.cafe.t')}</b><i>${t('home.cafe.s')}</i></span>
       <span class="go">›</span>
     </button>
+    <button class="walkincard wide" onclick="openSubscribe()">
+      <span class="we">📦</span>
+      <span class="wt"><b>${t('home.subs.t')}</b><i>${t('home.subs.s')}</i></span>
+      <span class="go">›</span>
+    </button>
     <button class="btn ghost" onclick="go('tour')" style="margin-top:10px">${t('home.tourCta')}</button>
 
     <div class="sectitle">${t('home.usp.head')}</div>
@@ -3926,7 +3967,7 @@ function vMyPet(){
     <div class="sectitle">${t('mypet.petsHead')}</div>
     <div class="gal" style="margin:0 -18px 4px;padding:6px 18px">
       ${S.pets.map(p=>{
-        const v = vaccinesSummary(p.vaccines);
+        const v = vaccinesSummary(p.vaccines, p.species);
         const hasTraits = !!(p.traits && p.traits.trim());
         return `<button class="card petcard" onclick="openPetSheet('${p.id}')">
           <div class="pc-ic">${p.emoji}</div>
@@ -4029,7 +4070,7 @@ function renderUpcomingCard(b){
   // 백신 필요 서비스인 경우 부족한 펫 식별
   const vacMissing = s.vaccine ? (b.petIds||[])
     .map(pid=>S.pets.find(p=>p.id===pid))
-    .filter(p=>p && !vaccinesSummary(p.vaccines).ok) : [];
+    .filter(p=>p && !vaccinesSummary(p.vaccines, p.species).ok) : [];
   return `<div class="card upcomingcard expanded">
     <div class="up-row">
       <div class="up-ic" style="background:${s.ic}">${s.emoji}</div>
@@ -4061,17 +4102,15 @@ function renderUpcomingCard(b){
 
 // 다시 이용하기 리스트: 서비스별 최근 3 + 즐겨찾기 영구
 function buildReuseList(all){
-  const result = [];
-  const starred = all.filter(b=>b.starred);
-  result.push(...starred);
-  // 서비스별 최근 3 (즐겨찾기 제외)
-  const bySvc = {};
-  all.filter(b=>!b.starred).slice().reverse().forEach(b=>{
-    if(!bySvc[b.service]) bySvc[b.service] = [];
-    if(bySvc[b.service].length < 3) bySvc[b.service].push(b);
-  });
-  Object.values(bySvc).forEach(arr=>result.push(...arr));
-  return result;
+  // 정렬 기준: 즐겨찾기 우선 → 그다음 최신순(날짜 내림차순), 최대 6개
+  const byRecent = (a,b) => {
+    const ad = a.dateObj ? new Date(a.dateObj).getTime() : 0;
+    const bd = b.dateObj ? new Date(b.dateObj).getTime() : 0;
+    return bd - ad;  // 최신이 앞
+  };
+  const starred = all.filter(b=>b.starred).sort(byRecent);
+  const rest    = all.filter(b=>!b.starred).sort(byRecent);
+  return [...starred, ...rest].slice(0, 6);
 }
 function toggleStar(id){
   const b = S.bookings.find(x=>x.id===id);
@@ -4151,7 +4190,7 @@ function vMore(){
       </button>
     </div>
 
-    ${S.loggedIn?`<button class="btn ghost" style="margin-top:14px" onclick="resetAll()">${t('more.logout')}</button>`:''}
+    ${S.loggedIn?`<button class="btn ghost" style="margin-top:14px" onclick="logout()">${t('more.logout')}</button>`:''}
     <div class="center" style="font-size:11px;color:var(--gray);margin-top:20px">${t('more.footer')}</div>
   </div>`;
 }
@@ -4166,9 +4205,31 @@ function startBooking(){
   openServicePicker();
 }
 function openServicePicker(){
+  // R6: 기존 예약이 1건이라도 있으면 최근 예약을 상단에 카드로 보여주고, 누르면 예약 현황으로
+  const allBk = (S.bookings||[]).slice().sort((a,b)=>{
+    const ad=a.dateObj?new Date(a.dateObj).getTime():0, bd=b.dateObj?new Date(b.dateObj).getTime():0;
+    return bd-ad;
+  });
+  const recent = allBk[0];
+  let recentCard = '';
+  if(recent){
+    const s=SERVICES[recent.service];
+    const svcKey='svc.'+recent.service;
+    const svcName = I18N[svcKey+'.name'] ? t(svcKey+'.name') : s.name;
+    recentCard = `
+      <div style="font-size:11.5px;font-weight:700;color:var(--brown);padding:0 2px 7px">${t('svcpick.recentHead')}</div>
+      <button class="svcpick" style="background:linear-gradient(135deg,#FBF2E4,#F6E8D4);border:1.5px solid #E8D4B2;margin-bottom:6px" onclick="closeSheet();go('mypet')">
+        <span class="ic" style="background:${s.ic}">${s.emoji}</span>
+        <span class="t"><b>${recent.petNames} · ${svcName}</b><i>${recent.dateLabel||''}${optNameLabel(recent)?' · '+optNameLabel(recent):''}</i></span>
+        <span class="go">›</span>
+      </button>
+      <div style="font-size:11px;color:var(--accentDk);font-weight:700;padding:0 2px 14px;cursor:pointer" onclick="closeSheet();go('mypet')">${t('svcpick.recentTap')}</div>
+      <div style="font-size:11.5px;font-weight:700;color:var(--brown);padding:4px 2px 7px;border-top:1px dashed var(--line);margin-top:4px;padding-top:14px">${t('svcpick.newHead')}</div>`;
+  }
   openSheetHTML(`<div class="grab"></div>
     <div style="font-family:'Fraunces',serif;font-size:21px;color:var(--brown);font-weight:600;padding:0 2px 2px">${t('svcpick.title')}</div>
     <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">${t('svcpick.sub')}</div>
+    ${recentCard}
     ${BOOKABLE.map(k=>{ const s=SERVICES[k];
       const svcKey='svc.'+k;
       const nm = I18N[svcKey+'.name'] ? t(svcKey+'.name') : s.name;
@@ -4591,7 +4652,7 @@ function openPetSheet(petId){
   const p = S.pets.find(x=>x.id===petId);
   if(!p) return;
   const band = WEIGHT_BANDS.find(b=>b.id===p.band);
-  const v = vaccinesSummary(p.vaccines);
+  const v = vaccinesSummary(p.vaccines, p.species);
   const coreLabel = p.species==='dog' ? t('petSheet.vacCoreDog') : t('petSheet.vacCoreCat');
   const speciesLabel = p.species==='dog' ? t('petSheet.dog') : t('petSheet.cat');
   // 백신 상태 라벨 헬퍼
@@ -4622,7 +4683,7 @@ function openPetSheet(petId){
           <span>${t('petSheet.vacCardHead')}</span>
           <span class="vaccineBadge ${v.cls}">${v.label}</span>
         </div>
-        <div class="vc-row"><span>${t('petSheet.rabiesLabel')}</span><b class="${p.vaccines?.rabies||'unknown'}">${vacStLabel(p.vaccines?.rabies)}</b></div>
+        ${p.species!=='cat' ? `<div class="vc-row"><span>${t('petSheet.rabiesLabel')}</span><b class="${p.vaccines?.rabies||'unknown'}">${vacStLabel(p.vaccines?.rabies)}</b></div>` : ''}
         <div class="vc-row"><span>${coreLabel}</span><b class="${p.vaccines?.core||'unknown'}">${vacStLabel(p.vaccines?.core)}</b></div>
         ${p.vaccines?.note?`<div class="vc-note">📌 ${p.vaccines.note}</div>`:''}
         ${v.ok?'':`<div class="vc-warn">${t('petSheet.vacWarnFull')}</div>`}
@@ -5194,6 +5255,15 @@ function togglePet(id){ const i=S.d.petIds.indexOf(id); if(i<0) S.d.petIds.push(
 
 // --- step: pickup ---
 function stepPickup(s){
+  // R4: 픽업 단계 진입 시 기본값을 '네, 픽업 받을게요'로
+  if(S.d.pickup===null || S.d.pickup===undefined){
+    S.d.pickup = 'yes';
+    // 기본 주소가 있으면 자동 선택 (없으면 사용자가 고르거나 추가)
+    if(!S.d.addrId){
+      const defAddr = S.addresses.find(a=>a.isDefault) || S.addresses[0];
+      if(defAddr) S.d.addrId = defAddr.id;
+    }
+  }
   const has = S.d.pickup!==null;
   const addrOk = S.d.pickup==='no' || addressReady();
   const phoneOk = phoneReady();
@@ -5218,7 +5288,7 @@ function stepPickup(s){
     </div>
   </div>
 
-  <div style="height:108px"></div>
+  <div style="height:170px"></div>
   ${flowFoot(has && addrOk && phoneOk, t('bk.pickup.next'))}`;
 }
 
@@ -5327,7 +5397,10 @@ function refreshFootBtn(){
   const btn = $('flowNext');
   if(!btn) return;
   const has = S.d.pickup!==null;
-  btn.disabled = !(has && addressReady() && phoneReady());
+  const ready = has && addressReady() && phoneReady();
+  btn.disabled = !ready;
+  // 색도 함께 갱신: 준비되면 soft(연한색) 제거 → 진한 활성색
+  btn.classList.toggle('soft', !ready);
 }
 
 // 호환용 (이전 newAddr는 신규 진입으로 매핑)
@@ -5413,7 +5486,7 @@ function stepConfirm(s){
 function vaccineNoticeForBooking(petIds, b){
   const pets = S.pets.filter(p=>petIds.includes(p.id));
   if(!pets.length) return '';
-  const allOk = pets.every(p=>vaccinesSummary(p.vaccines).ok);
+  const allOk = pets.every(p=>vaccinesSummary(p.vaccines, p.species).ok);
   if(allOk){
     return `<div class="card vaccineNotice ok">
       <div class="vn-h">${t('vac.notice.okHead')}</div>
@@ -5421,8 +5494,8 @@ function vaccineNoticeForBooking(petIds, b){
     </div>`;
   }
   // 부족한 펫
-  const rows = pets.filter(p=>!vaccinesSummary(p.vaccines).ok).map(p=>{
-    const v = vaccinesSummary(p.vaccines);
+  const rows = pets.filter(p=>!vaccinesSummary(p.vaccines, p.species).ok).map(p=>{
+    const v = vaccinesSummary(p.vaccines, p.species);
     return `<div class="vn-pet" onclick="closeFlowSheetIfAny&&closeFlowSheetIfAny();openPetSheet('${p.id}')">
       <span class="vn-emoji">${p.emoji}</span>
       <span class="vn-nm">${p.name}</span>
@@ -5446,7 +5519,7 @@ function vaccineNoticeForBooking(petIds, b){
     ${deadlineHtml}
     <div class="vn-pets">${rows}</div>
     <div class="vn-actions">
-      <button class="vn-act primary" onclick="closeFlowSheetIfAny&&closeFlowSheetIfAny();openPetSheet('${pets.filter(p=>!vaccinesSummary(p.vaccines).ok)[0].id}')">${t('vac.notice.regCta')}</button>
+      <button class="vn-act primary" onclick="closeFlowSheetIfAny&&closeFlowSheetIfAny();openPetSheet('${pets.filter(p=>!vaccinesSummary(p.vaccines, p.species).ok)[0].id}')">${t('vac.notice.regCta')}</button>
       <button class="vn-act" onclick="openContactSheet()">${t('vac.notice.photoCta')}</button>
     </div>
   </div>`;
@@ -5672,6 +5745,7 @@ function vDone(b){
     </div>
     <button class="btn" style="margin-top:12px" onclick="openPayQR('${b.id}')">${t('done.payCta')}</button>
     <button class="btn dark" style="margin-top:8px" onclick="openContactSheet()">${t('done.chatCta')}</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="changeBooking('${b.id}')">${t('done.editCta')}</button>
     <button class="btn ghost" style="margin-top:8px" onclick="go('mypet')">${t('done.viewMy')}</button>
     <div style="font-size:12px;color:var(--gray);margin-top:18px;line-height:1.6">
       ${t('done.tip')}</div>
@@ -6350,29 +6424,79 @@ function reuseBooking(id){
 // `after` decides post-signup branch:
 //   'book'  → signup, then (if booking) register a pet
 //   'mypet'/'more' → simple signup only, no pet needed
+// R2/R3: 마지막 로그인 수단(S._lastProvider)이 있으면 '로그인' 맥락으로,
+//        그 수단을 맨 위에 크게 두고 나머지는 '다른 방법으로 로그인' 아래에 접어둔다.
+
+// provider별 소셜 버튼 HTML 생성 (큰 버튼 / 작은 버튼 공용)
+function authSocialBtn(provider){
+  const onclick = provider==='Phone' ? 'openPhone()' : `doLogin('${provider}')`;
+  if(provider==='Google') return `<button class="social g" onclick="${onclick}">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.06-1.4-.18-2.05H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.55c2.08-1.92 3.25-4.74 3.25-7.85z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.7c-.98.66-2.24 1.05-3.73 1.05-2.87 0-5.3-1.94-6.16-4.55H2.18v2.78A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.14a6.6 6.6 0 0 1 0-4.28V7.08H2.18a11 11 0 0 0 0 9.84z"/><path fill="#EA4335" d="M12 4.96c1.62 0 3.07.56 4.21 1.65l3.15-3.15A10.6 10.6 0 0 0 12 .5 11 11 0 0 0 2.18 7.08l3.66 2.78C6.7 6.9 9.13 4.96 12 4.96z"/></svg>
+      ${t('auth.google')}</button>`;
+  if(provider==='Phone') return `<button class="social" style="background:#3F8D52;color:#fff;border-color:#3F8D52" onclick="${onclick}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l1 4v2a2 2 0 0 1-2 2A16 16 0 0 1 3 7a2 2 0 0 1 2-3z"/></svg>
+      ${t('auth.phone')}</button>`;
+  if(provider==='Kakao') return `<button class="social" style="background:#FEE500;color:#3C1E1E;border-color:#FEE500" onclick="${onclick}">
+      <svg viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.7 1.8 5.1 4.5 6.5l-1 3.5 3.8-2.3c.9.2 1.8.3 2.7.3 5.5 0 10-3.5 10-7.8S17.5 3 12 3z"/></svg>
+      ${t('auth.kakao')}</button>`;
+  if(provider==='Zalo') return `<button class="social z" onclick="${onclick}">
+      <svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="11" fill="#fff"/><text x="12" y="16" font-size="9" font-weight="700" fill="#0068FF" text-anchor="middle">Zalo</text></svg>
+      ${t('auth.zalo')}</button>`;
+  return '';
+}
+
 function openAuth(after){
   S._authAfter=after;
   const forBooking = (after==='book' || S._pendingSvc);
+  const ALL = ['Google','Phone','Kakao','Zalo'];
+  const last = S._lastProvider;
+  const isReturning = !!last;   // 최근 로그인 수단이 있으면 '로그인' 맥락
+
+  // 타이틀/리드: 돌아온 사용자(로그인) vs 신규(가입/예약)
+  const title = isReturning ? t('auth.titleLogin')
+              : forBooking  ? t('auth.titleBook')
+              : t('auth.titleSignup');
+  const lead  = isReturning ? t('auth.leadLogin')
+              : forBooking  ? t('auth.leadBook')
+              : t('auth.leadSignup');
+  const footNote = isReturning ? t('auth.afterLogin')
+                 : forBooking  ? t('auth.afterBook')
+                 : t('auth.afterSignup');
+
+  let bodyBtns;
+  if(isReturning){
+    // R3: 최근 수단을 맨 위 크게 + "최근 사용" 배지, 나머지는 토글 아래 접기
+    const others = ALL.filter(p=>p!==last);
+    bodyBtns = `
+      <div style="font-size:11px;font-weight:700;color:var(--accentDk);padding:0 2px 6px">⭐ ${t('auth.lastUsed')}</div>
+      ${authSocialBtn(last)}
+      <button class="authmore" onclick="toggleAuthOthers()" id="authMoreBtn" style="margin-top:14px">
+        <span>${t('auth.otherMethods')}</span><span id="authMoreArrow">▾</span>
+      </button>
+      <div id="authOthers" style="display:none;margin-top:8px">
+        ${others.map(authSocialBtn).join('')}
+      </div>`;
+  } else {
+    // 신규/예약: 모든 수단 그대로
+    bodyBtns = ALL.map(authSocialBtn).join('');
+  }
+
   openSheetHTML(`<div class="grab"></div>
     <div class="center" style="padding:2px 4px 0">
       <img src="${LOGO_FULL}" alt="Posh Pet" style="width:92px;height:auto;margin:0 auto">
-      <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--brown);font-weight:600;margin:6px 0 4px">${forBooking?t('auth.titleBook'):t('auth.titleSignup')}</div>
-      <div style="font-size:13px;color:var(--gray);margin-bottom:18px">${forBooking?t('auth.leadBook'):t('auth.leadSignup')}</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--brown);font-weight:600;margin:6px 0 4px">${title}</div>
+      <div style="font-size:13px;color:var(--gray);margin-bottom:18px">${lead}</div>
     </div>
-    <button class="social g" onclick="doLogin('Google')">
-      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.06-1.4-.18-2.05H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.55c2.08-1.92 3.25-4.74 3.25-7.85z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.7c-.98.66-2.24 1.05-3.73 1.05-2.87 0-5.3-1.94-6.16-4.55H2.18v2.78A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.14a6.6 6.6 0 0 1 0-4.28V7.08H2.18a11 11 0 0 0 0 9.84z"/><path fill="#EA4335" d="M12 4.96c1.62 0 3.07.56 4.21 1.65l3.15-3.15A10.6 10.6 0 0 0 12 .5 11 11 0 0 0 2.18 7.08l3.66 2.78C6.7 6.9 9.13 4.96 12 4.96z"/></svg>
-      ${t('auth.google')}</button>
-    <button class="social" style="background:#3F8D52;color:#fff;border-color:#3F8D52" onclick="openPhone()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l1 4v2a2 2 0 0 1-2 2A16 16 0 0 1 3 7a2 2 0 0 1 2-3z"/></svg>
-      ${t('auth.phone')}</button>
-    <button class="social" style="background:#FEE500;color:#3C1E1E;border-color:#FEE500" onclick="doLogin('Kakao')">
-      <svg viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.7 1.8 5.1 4.5 6.5l-1 3.5 3.8-2.3c.9.2 1.8.3 2.7.3 5.5 0 10-3.5 10-7.8S17.5 3 12 3z"/></svg>
-      ${t('auth.kakao')}</button>
-    <button class="social z" onclick="doLogin('Zalo')">
-      <svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="11" fill="#fff"/><text x="12" y="16" font-size="9" font-weight="700" fill="#0068FF" text-anchor="middle">Zalo</text></svg>
-      ${t('auth.zalo')}</button>
-    <div class="center" style="font-size:11px;color:var(--gray);margin-top:14px;line-height:1.5">${t('auth.privacy')}<br>${forBooking?t('auth.afterBook'):t('auth.afterSignup')}</div>
+    ${bodyBtns}
+    <div class="center" style="font-size:11px;color:var(--gray);margin-top:14px;line-height:1.5">${t('auth.privacy')}<br>${footNote}</div>
   `);
+}
+function toggleAuthOthers(){
+  const box=$('authOthers'), arr=$('authMoreArrow');
+  if(!box) return;
+  const open = box.style.display!=='none';
+  box.style.display = open?'none':'block';
+  if(arr) arr.textContent = open?'▾':'▴';
 }
 
 // --- phone number + OTP signup ---
@@ -6443,7 +6567,11 @@ function doLogin(provider){
     );
   }
   closeSheet();
-  hint(t('auth.welcome',{provider:provider}));
+  // R3: 재로그인 여부 — 이번 로그인 전에 이미 마지막 수단이 기록돼 있었으면 '다시 로그인'
+  const wasReturning = !!S._lastProvider;
+  S._lastProvider = provider;   // 이번 수단을 기억 (다음 진입 시 기본 표시)
+  const provLabel = t('auth.provName.'+provider) || provider;
+  hint(wasReturning ? t('auth.welcomeBack',{provider:provLabel}) : t('auth.welcome',{provider:provLabel}));
   const after=S._authAfter;
   const forBooking = (after==='book' || S._pendingSvc);
   if(forBooking){
@@ -6483,7 +6611,7 @@ function renderPetSheet(){
   if(!d.vaccines) d.vaccines = { rabies:null, core:null, note:'' };
   // 백신 명칭은 종별로 (다국어)
   const coreLabel = d.species==='dog' ? t('petSheet.vacCoreDog') : t('petSheet.vacCoreCat');
-  const vaccineSummary = vaccinesSummary(d.vaccines);
+  const vaccineSummary = vaccinesSummary(d.vaccines, d.species);
   openSheetHTML(`<div class="grab"></div>
     <div style="font-family:'Fraunces',serif;font-size:21px;color:var(--brown);font-weight:600;padding:0 2px 2px">${isEdit?t('petForm.titleEdit'):t('petForm.titleNew')}</div>
     <div style="font-size:12.5px;color:var(--gray);padding:0 2px 16px">${isEdit?t('petForm.leadEdit2'):t('petForm.leadNew2')}</div>
@@ -6494,8 +6622,8 @@ function renderPetSheet(){
     </div>
     <div style="padding:0 2px 6px"><label style="font-size:12.5px;font-weight:600;color:var(--mocha)">${t('petForm.kind')}</label></div>
     <div style="display:flex;gap:10px;padding:0 2px 16px">
-      <button class="chip ${d.species==='dog'?'on':''}" style="flex:1;justify-content:center" onclick="S._petDraft.species='dog';S._petDraft.breed=null;renderPetSheet()">${t('petForm.species.dog')}</button>
-      <button class="chip ${d.species==='cat'?'on':''}" style="flex:1;justify-content:center" onclick="S._petDraft.species='cat';S._petDraft.breed=null;renderPetSheet()">${t('petForm.species.cat')}</button>
+      <button class="chip ${d.species==='dog'?'on':''}" style="flex:1;justify-content:center" onclick="setPetSpecies('dog')">${t('petForm.species.dog')}</button>
+      <button class="chip ${d.species==='cat'?'on':''}" style="flex:1;justify-content:center" onclick="setPetSpecies('cat')">${t('petForm.species.cat')}</button>
     </div>
     <div style="padding:0 2px 6px"><label style="font-size:12.5px;font-weight:600;color:var(--mocha)">${t('petForm.breed')} <span style="color:var(--gray);font-weight:400">${t('petForm.breedHint')}</span></label></div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 2px 16px">
@@ -6512,11 +6640,11 @@ function renderPetSheet(){
       <span class="vaccineBadge ${vaccineSummary.cls}">${vaccineSummary.label}</span>
     </div>
     <div class="vaccineBox">
-      <div class="vaccineRow">
+      ${d.species!=='cat' ? `<div class="vaccineRow">
         <span class="vr-name">${t('petSheet.rabiesLabel')}</span>
         <button class="chip sm ${d.vaccines.rabies==='ok'?'on':''}" onclick="setVaccine('rabies','ok')">${t('petForm.vacOkBtn')}</button>
         <button class="chip sm ${d.vaccines.rabies==='no'?'on':''}" onclick="setVaccine('rabies','no')">${t('petForm.vacNoBtn')}</button>
-      </div>
+      </div>` : ''}
       <div class="vaccineRow">
         <span class="vr-name">${coreLabel}</span>
         <button class="chip sm ${d.vaccines.core==='ok'?'on':''}" onclick="setVaccine('core','ok')">${t('petForm.vacOkBtn')}</button>
@@ -6547,9 +6675,25 @@ function setVaccine(kind, val){
   S._petDraft.vaccines[kind] = val;
   renderPetSheet();
 }
+// 종 선택: 고양이는 광견병 대상이 아니므로 rabies 값을 비운다
+function setPetSpecies(sp){
+  S._petDraft.species = sp;
+  S._petDraft.breed = null;
+  if(sp==='cat' && S._petDraft.vaccines){ S._petDraft.vaccines.rabies = null; }
+  renderPetSheet();
+}
 // 한 펫의 백신 상태 요약
-function vaccinesSummary(v){
+// species를 넘기면 고양이는 광견병(rabies) 판정에서 제외 (고양이=core만, 개=rabies+core)
+function vaccinesSummary(v, species){
   if(!v) return { cls:'unknown', label:t('vac.sum.unknown'), ok:false };
+  const isCat = species === 'cat';
+  if(isCat){
+    // 고양이: 종합백신(core)만 본다
+    if(v.core==='ok') return { cls:'ok', label:t('vac.sum.ok'), ok:true };
+    if(v.core==='no') return { cls:'no', label:t('vac.sum.no'), ok:false };
+    return { cls:'unknown', label:t('vac.sum.unknown'), ok:false };
+  }
+  // 개(또는 미지정): rabies + core 둘 다
   const ok = v.rabies==='ok' && v.core==='ok';
   if(ok) return { cls:'ok', label:t('vac.sum.ok'), ok:true };
   if(v.rabies==='no' || v.core==='no') return { cls:'no', label:t('vac.sum.no'), ok:false };
@@ -6619,10 +6763,21 @@ function bindFlow(){
 function resetAll(){
   S.loggedIn=false; S.user=null; S.pets=[]; S.addresses=[]; S.phones=[]; S.vaccineOnFile=false;
   S.bookings=[]; S.packages=[]; S.coupons=[]; S.credit=0; S._pendingSvc=null;
+  S._lastProvider=null;   // 완전 초기화에서는 로그인 수단 기억도 지움
   S.d={ service:null, room:null, dateA:null, dateB:null, time:null, petIds:[],
         pickup:null, addrId:null, phoneId:null, addonAddr:null, addonAddrLabel:null,
         addonPhone:null, addonPhoneLabel:null, notes:'' };
   go('home'); hint('초기화됐어요 — 처음부터 체험해보세요');
+}
+// 로그아웃: 세션만 종료하고 '마지막 로그인 수단'은 보존 (다음 로그인 시 기본 표시 — R3)
+function logout(){
+  S.loggedIn=false; S.user=null; S.pets=[]; S.addresses=[]; S.phones=[]; S.vaccineOnFile=false;
+  S.bookings=[]; S.packages=[]; S.coupons=[]; S.credit=0; S._pendingSvc=null;
+  // S._lastProvider 는 일부러 유지
+  S.d={ service:null, room:null, dateA:null, dateB:null, time:null, petIds:[],
+        pickup:null, addrId:null, phoneId:null, addonAddr:null, addonAddrLabel:null,
+        addonPhone:null, addonPhoneLabel:null, notes:'' };
+  go('home'); hint(t('toast.loggedOut'));
 }
 
 // ============================================================================
