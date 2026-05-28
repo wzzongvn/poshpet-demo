@@ -221,9 +221,9 @@
   /* calendar */
   .cal{padding:4px 14px;}
   .calhead{display:flex; justify-content:space-between; align-items:center; padding:6px 6px 12px; font-weight:600; color:var(--brown);}
-  .calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
+  .calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
   .dow{font-size:10.5px; color:var(--gray); text-align:center; padding-bottom:6px; font-weight:700;}
-  .day{aspect-ratio:1; max-height:52px; display:flex; align-items:center; justify-content:center; font-size:13.5px;
+  .day{aspect-ratio:1; max-height:42px; display:flex; align-items:center; justify-content:center; font-size:13.5px;
     border-radius:11px; color:var(--ink); position:relative; cursor:pointer;}
   .day.mut{color:#cfc3b3; pointer-events:none;}
   .day.off{color:#d8b5b0; text-decoration:line-through; pointer-events:none;}
@@ -5263,6 +5263,12 @@ function stepPickup(s){
       const defAddr = S.addresses.find(a=>a.isDefault) || S.addresses[0];
       if(defAddr) S.d.addrId = defAddr.id;
     }
+  }
+  // 연락받을 번호: 저장된 기본 번호가 있으면 자동 선택.
+  // 이게 빠지면 phoneReady()가 false라 주소를 다 채워도 '예약 확인' 버튼이 비활성(회색)으로 남는다.
+  if(!S.d.phoneId && S.phones.length){
+    const defPhone = S.phones.find(p=>p.isDefault) || S.phones[0];
+    if(defPhone) S.d.phoneId = defPhone.id;
   }
   const has = S.d.pickup!==null;
   const addrOk = S.d.pickup==='no' || addressReady();
