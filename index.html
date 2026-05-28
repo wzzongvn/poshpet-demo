@@ -2134,6 +2134,45 @@ const I18N = {
                         en:'✓ Vaccine info saved · Synced to MyPet too'},
   'adm.vac.input.openBtn':{kr:'💉 백신 등록', vi:'💉 Đăng ký vaccine', en:'💉 Register vaccine'},
 
+  // ── STATUS_INFO 라벨 (예약 상태 칩 — 대시보드/예약 관리 전반) ──
+  'adm.status.scheduled':  {kr:'예정', vi:'Đã đặt', en:'Scheduled'},
+  'adm.status.waiting':    {kr:'대기', vi:'Chờ', en:'Waiting'},
+  'adm.status.in_progress':{kr:'진행 중', vi:'Đang phục vụ', en:'In progress'},
+  'adm.status.staying':    {kr:'투숙 중', vi:'Đang lưu trú', en:'Staying'},
+  'adm.status.done':       {kr:'완료', vi:'Hoàn tất', en:'Done'},
+  'adm.status.cancelled':  {kr:'취소', vi:'Đã hủy', en:'Cancelled'},
+
+  // ── 예약 svcName 동적 라벨 (todayBookings.svc 키 → 표시명) ──
+  'adm.svc.grooming':      {kr:'그루밍', vi:'Grooming', en:'Grooming'},
+  'adm.svc.spa':           {kr:'스파(목욕)', vi:'Spa (tắm)', en:'Spa (bath)'},
+  'adm.svc.pool':          {kr:'수영장 ({min}분)', vi:'Hồ bơi ({min} phút)', en:'Pool ({min} min)'},
+  'adm.svc.daycare':       {kr:'유치원 ({hr}시간)', vi:'Daycare ({hr} giờ)', en:'Daycare ({hr}h)'},
+  'adm.svc.hotel':         {kr:'호텔 ({n}박)', vi:'Khách sạn ({n} đêm)', en:'Hotel ({n} nights)'},
+  'adm.svc.hotelShort':    {kr:'호텔', vi:'Khách sạn', en:'Hotel'},
+
+  // ── 회원 history 라벨 i18n ──
+  'adm.hist.charge':       {kr:'VIP {tier} 정액권 가입', vi:'Đăng ký VIP {tier}', en:'VIP {tier} package signup'},
+  'adm.hist.recharge':     {kr:'VIP {tier} 정액권 추가 충전', vi:'Nạp thêm VIP {tier}', en:'VIP {tier} top-up'},
+  'adm.hist.svc.grooming.full':  {kr:'그루밍 (풀)', vi:'Grooming (full)', en:'Grooming (full)'},
+  'adm.hist.svc.grooming.face':  {kr:'그루밍 (얼굴컷)', vi:'Grooming (mặt)', en:'Grooming (face)'},
+  'adm.hist.svc.spa':            {kr:'스파(목욕)', vi:'Spa (tắm)', en:'Spa (bath)'},
+  'adm.hist.svc.spa.bath':       {kr:'목욕 & 위생', vi:'Tắm & vệ sinh', en:'Bath & hygiene'},
+  'adm.hist.svc.hotel':          {kr:'호텔 ({n}박)', vi:'Khách sạn ({n} đêm)', en:'Hotel ({n} nights)'},
+  'adm.hist.svc.pool':           {kr:'수영장 (30분)', vi:'Hồ bơi (30 phút)', en:'Pool (30 min)'},
+  'adm.hist.svc.daycare':        {kr:'유치원 ({h}시간)', vi:'Daycare ({h} giờ)', en:'Daycare ({h}h)'},
+  'adm.hist.svc.daycare.month':  {kr:'유치원 20회 패키지', vi:'Daycare gói 20 lần', en:'Daycare 20-pack'},
+  'adm.hist.paid':         {kr:'{amount} VND 결제', vi:'Đã trả {amount} VND', en:'Paid {amount} VND'},
+
+  // ── "X일 전" / "X주 전" 상대시간 ──
+  'adm.recent.today':      {kr:'오늘', vi:'Hôm nay', en:'Today'},
+  'adm.recent.daysAgo':    {kr:'{n}일 전', vi:'{n} ngày trước', en:'{n} days ago'},
+  'adm.recent.weeksAgo':   {kr:'{n}주 전', vi:'{n} tuần trước', en:'{n} weeks ago'},
+  'adm.recent.monthsAgo':  {kr:'{n}개월 전', vi:'{n} tháng trước', en:'{n} months ago'},
+
+  // ── 회원 mock의 사용 내역에 자주 나오는 추가 라벨 ──
+  'adm.hist.svc.grooming':       {kr:'그루밍', vi:'Grooming', en:'Grooming'},
+  'adm.hist.svc.hotelStay':      {kr:'호텔 ({n}박, 다자녀 5%)', vi:'Khách sạn ({n} đêm, đa thú 5%)', en:'Hotel ({n} nights, multi-pet 5%)'},
+
   // ===== 휴면 캠페인 =====
   'camp.title':         {kr:'단체 메시지 발송', vi:'Gửi tin nhắn hàng loạt', en:'Bulk message campaign'},
   'camp.targets':       {kr:'대상 고객',   vi:'Khách hàng',       en:'Targets'},
@@ -3080,8 +3119,19 @@ const WEEK_LABELS = {
 };
 function weekLabel(idx){ return (WEEK_LABELS[CURRENT_LANG]||WEEK_LABELS.kr)[idx]; }
 
-// 현재 언어 (브라우저 storage 사용 안 함 → 데모 세션에서만 유지)
-let CURRENT_LANG = 'kr';
+// 현재 언어 결정 — ① localStorage 저장값 > ② navigator.language 추론 > ③ 기본 KR
+function detectInitialLang(){
+  try {
+    const saved = localStorage.getItem('poshpet.lang');
+    if(saved && ['kr','vi','en'].includes(saved)) return saved;
+  } catch(e){ /* private 모드 등 — 무시 */ }
+  const nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  if(nav.startsWith('ko')) return 'kr';
+  if(nav.startsWith('vi')) return 'vi';
+  if(nav.startsWith('en')) return 'en';
+  return 'kr';
+}
+let CURRENT_LANG = detectInitialLang();
 
 // 번역 헬퍼 — 미정의 키는 KR로 fallback, 그래도 없으면 키 그대로 반환
 function t(key, vars){
@@ -3095,16 +3145,30 @@ function t(key, vars){
   return text;
 }
 
-// 언어 변경 — 전체 화면 다시 그리기
+// 언어 변경 — 전체 화면 다시 그리기 + 영속화 + 시트 보존
 function setLang(lang){
   if(!['kr','vi','en'].includes(lang)) return;
   if(CURRENT_LANG === lang) return;
   CURRENT_LANG = lang;
-  // 현재 화면 재렌더링
+  try { localStorage.setItem('poshpet.lang', lang); } catch(e){ /* 무시 */ }
+
+  // 시트가 열려 있고 재렌더 함수가 등록되어 있으면 — 작성 중인 내용 보존
+  const sheetOpen = document.getElementById('sheet')?.classList.contains('show');
+  const redraw = _currentSheetRedraw;
+
+  // 메인 화면 재렌더링
   if(typeof render === 'function' && S.view) render(S.view);
   if(typeof renderAdmin === 'function' && document.getElementById('ppwrap')?.classList.contains('admin')) renderAdmin();
-  // 시트가 열려 있으면 닫기 (시트 텍스트도 갱신 필요한데, 일부 시트는 state를 잃음)
-  if(typeof closeSheet === 'function') closeSheet();
+
+  // 시트 처리
+  if(sheetOpen){
+    if(redraw){
+      try { redraw(); } catch(e){ closeSheet(); }
+    } else {
+      closeSheet();
+    }
+  }
+
   hint(t('langChanged.toast.'+lang));
 }
 
@@ -4417,7 +4481,7 @@ function renderSubscribeEditor(){
 
     <button class="btn" style="margin-top:14px" ${d.items.length?'':'disabled'} onclick="saveSubscription()">${t('sub.start')}</button>
     <button class="btn ghost" style="margin-top:8px" onclick="closeSheet()">${t('sub.close')}</button>
-  `);
+  `, renderSubscribeEditor);
 }
 function adjustSubQty(catId, delta){
   const d = S._subDraft;
@@ -5594,7 +5658,7 @@ function renderProfileBoostSheet(){
 
     <button class="btn" style="margin-top:14px" onclick="saveProfileBoost()">${t('boostSheet.save')}</button>
     <button class="btn ghost" style="margin-top:8px" onclick="closeSheet();render(S.view)">${t('boostSheet.skip')}</button>
-  `);
+  `, renderProfileBoostSheet);
 }
 function renderBoostPetSection(p, i){
   return `<div class="boostSection" style="margin-top:14px">
@@ -6078,6 +6142,18 @@ function doLogin(provider){
   if(S.phones.length===0 && S.user.phoneAuto){
     S.phones.push({ id:'ph'+Date.now(), label:'본인', number:S.user.phoneAuto, isDefault:true });
   }
+
+  // 채널 → 언어 자동 매칭: localStorage에 명시적 저장값이 없을 때만 (사용자 의사 존중)
+  let savedLang = null;
+  try { savedLang = localStorage.getItem('poshpet.lang'); } catch(e){}
+  if(!savedLang){
+    const inferLang = provider==='Kakao' ? 'kr' : (provider==='Zalo' ? 'vi' : null);
+    if(inferLang && inferLang !== CURRENT_LANG){
+      CURRENT_LANG = inferLang;
+      // 저장은 하지 않음 — 사용자가 직접 토글하면 그때 저장
+    }
+  }
+
   closeSheet();
   hint(t('auth.loginDone',{provider:provider}));
   const after=S._authAfter;
@@ -6181,7 +6257,7 @@ function renderPetSheet(){
 
     <button class="btn" id="petSave" style="margin-top:14px" ${ready?'':'disabled'} onclick="savePet()">${isEdit?t('petForm.saveEdit'):t('petForm.saveNew')}</button>
     <div class="center" style="font-size:11px;color:var(--gray);margin-top:12px">${t('petForm.foot')}</div>
-  `);
+  `, renderPetSheet);
 }
 function setVaccine(kind, val){
   if(!S._petDraft.vaccines) S._petDraft.vaccines={rabies:null,core:null,note:''};
@@ -6239,8 +6315,19 @@ function savePet(){
 }
 
 // ============================ SHEET PRIMITIVES ============================
-function openSheetHTML(html){ $('sheet').innerHTML=html; $('sheet').classList.add('show'); $('sheetbg').classList.add('show'); }
-function closeSheet(){ $('sheet').classList.remove('show'); $('sheetbg').classList.remove('show'); }
+// 현재 열린 시트의 재렌더 함수 추적 (언어 전환 시 시트 보존용)
+let _currentSheetRedraw = null;
+function openSheetHTML(html, redrawFn){
+  $('sheet').innerHTML=html;
+  $('sheet').classList.add('show');
+  $('sheetbg').classList.add('show');
+  _currentSheetRedraw = redrawFn || null;
+}
+function closeSheet(){
+  $('sheet').classList.remove('show');
+  $('sheetbg').classList.remove('show');
+  _currentSheetRedraw = null;
+}
 
 function bindFlow(){
   // 둘러보기 갤러리 도트 동기화
@@ -6434,13 +6521,97 @@ const ADMIN = {
 
 // 상태 색·라벨
 const STATUS_INFO = {
-  scheduled:  { label:'예정',    color:'#888',    bg:'#EFEAE3' },
-  waiting:    { label:'대기',    color:'#B5793A', bg:'#FFF1DE' },
-  in_progress:{ label:'진행 중', color:'#3F8D52', bg:'#E4F5E7' },
-  staying:    { label:'투숙 중', color:'#5A3F8D', bg:'#EDE7F5' },
-  done:       { label:'완료',    color:'#666',    bg:'#E8E5DF' },
-  cancelled:  { label:'취소',    color:'#C44',    bg:'#FBE7E7' },
+  scheduled:  { labelKey:'adm.status.scheduled',  label:'예정',    color:'#888',    bg:'#EFEAE3' },
+  waiting:    { labelKey:'adm.status.waiting',    label:'대기',    color:'#B5793A', bg:'#FFF1DE' },
+  in_progress:{ labelKey:'adm.status.in_progress',label:'진행 중', color:'#3F8D52', bg:'#E4F5E7' },
+  staying:    { labelKey:'adm.status.staying',    label:'투숙 중', color:'#5A3F8D', bg:'#EDE7F5' },
+  done:       { labelKey:'adm.status.done',       label:'완료',    color:'#666',    bg:'#E8E5DF' },
+  cancelled:  { labelKey:'adm.status.cancelled',  label:'취소',    color:'#C44',    bg:'#FBE7E7' },
 };
+function statusLabel(statusKey){
+  const s = STATUS_INFO[statusKey];
+  if(!s) return statusKey;
+  return s.labelKey ? t(s.labelKey) : s.label;
+}
+
+// 관리자 예약의 svcName을 현재 언어로 표시 — 없으면 mock의 svcName(한글) fallback
+function admSvcName(b){
+  if(!b || !b.svc) return b?.svcName || '';
+  switch(b.svc){
+    case 'grooming': return t('adm.svc.grooming');
+    case 'spa':      return t('adm.svc.spa');
+    case 'pool':     return t('adm.svc.pool', {min:30});
+    case 'daycare':  return t('adm.svc.daycare', {hr:8});
+    case 'hotel':    return b.nights
+                        ? t('adm.svc.hotel', {n:b.nights})
+                        : t('adm.svc.hotelShort');
+    default:         return b.svcName || b.svc;
+  }
+}
+
+// 회원 history의 라벨을 현재 언어로 표시 — 자주 쓰는 케이스만 매핑, 나머지는 원본
+function admHistLabel(h){
+  if(!h) return '';
+  const raw = h.label || '';
+  // 충전 — "VIP X 정액권 가입" 또는 "추가 충전" 형태
+  if(h.type === 'charge'){
+    const m = raw.match(/^VIP\s+([0-9]+M)\s*정액권/);
+    if(m){
+      if(/추가\s*충전/.test(raw)) return t('adm.hist.recharge', {tier:m[1]});
+      return t('adm.hist.charge', {tier:m[1]});
+    }
+    return raw; // 발행 시트 등 다른 경로는 t()로 이미 처리됨
+  }
+  // 서비스 — h.svc 키 우선
+  if(h.svc === 'grooming'){
+    if(/풀/.test(raw)) return t('adm.hist.svc.grooming.full');
+    if(/얼굴/.test(raw)) return t('adm.hist.svc.grooming.face');
+    return t('adm.hist.svc.grooming');
+  }
+  if(h.svc === 'spa'){
+    if(/목욕\s*&\s*위생|위생/.test(raw)) return t('adm.hist.svc.spa.bath');
+    return t('adm.hist.svc.spa');
+  }
+  if(h.svc === 'hotel'){
+    const m = raw.match(/(\d+)\s*박/);
+    if(m){
+      if(/다자녀/.test(raw)) return t('adm.hist.svc.hotelStay', {n:m[1]});
+      return t('adm.hist.svc.hotel', {n:m[1]});
+    }
+    return raw;
+  }
+  if(h.svc === 'pool'){
+    return t('adm.hist.svc.pool');
+  }
+  if(h.svc === 'daycare'){
+    if(/20회|패키지/.test(raw)) return t('adm.hist.svc.daycare.month');
+    const m = raw.match(/(\d+)\s*시간/);
+    if(m) return t('adm.hist.svc.daycare', {h:m[1]});
+    return raw;
+  }
+  return raw;
+}
+
+// 회원 history의 paid 필드 라벨 ("18,750,000 VND 결제" 형태)
+function admHistPaid(h){
+  if(!h || !h.paid) return '';
+  const m = String(h.paid).match(/^([\d,]+)\s*VND\s*결제$/);
+  if(m) return t('adm.hist.paid', {amount:m[1]});
+  return h.paid; // 다른 포맷은 그대로 (발행 시트의 t() 결과 등)
+}
+
+// "X일 전" / "X주 전" 등을 현재 언어로 변환
+function admRecent(raw){
+  if(!raw) return '';
+  if(/^오늘$/.test(raw)) return t('adm.recent.today');
+  let m = raw.match(/^(\d+)\s*일\s*전$/);
+  if(m) return t('adm.recent.daysAgo', {n:m[1]});
+  m = raw.match(/^(\d+)\s*주\s*전$/);
+  if(m) return t('adm.recent.weeksAgo', {n:m[1]});
+  m = raw.match(/^(\d+)\s*개월\s*전$/);
+  if(m) return t('adm.recent.monthsAgo', {n:m[1]});
+  return raw; // 'YYYY-MM-DD' 같은 케이스
+}
 
 // 관리자 라우터
 function goAdmin(view){
@@ -6678,7 +6849,7 @@ function vAdminDashboard(){
         <div class="tl-row" onclick="goAdmin('bookings')">
           <div class="tl-time">${b.time}</div>
           <div class="tl-bar ${b.status}" style="background:${STATUS_INFO[b.status].bg};border-left:3px solid ${STATUS_INFO[b.status].color}">
-            <b>${b.svcName}</b> · ${b.petName} (${b.ownerName})
+            <b>${admSvcName(b)}</b> · ${b.petName} (${b.ownerName})
             ${b.pickup?`<span class="pk">${t('adm.dash.timeline.pickup')}</span>`:''}
             ${b.live?'<span class="lv"><i></i>LIVE</span>':''}
           </div>
@@ -6691,8 +6862,8 @@ function adminBookingRow(b){
   return `<div class="bkrow">
     <div class="bk-time">${b.time}</div>
     <div class="bk-pet"><b>${b.petName}</b><i>${b.ownerName} · ${b.band}</i></div>
-    <div class="bk-svc">${b.svcName}<i>${b.room}</i></div>
-    <span class="bk-st" style="background:${STATUS_INFO[b.status].bg};color:${STATUS_INFO[b.status].color}">${STATUS_INFO[b.status].label}</span>
+    <div class="bk-svc">${admSvcName(b)}<i>${b.room}</i></div>
+    <span class="bk-st" style="background:${STATUS_INFO[b.status].bg};color:${STATUS_INFO[b.status].color}">${statusLabel(b.status)}</span>
     ${b.live?'<button class="bk-cam" onclick="event.stopPropagation();openLiveCam(\''+b.room+'\',true)">'+t('adm.bk.live')+'</button>':'<span class="bk-cam ph"></span>'}
   </div>`;
 }
@@ -6728,7 +6899,7 @@ function renderTodayVaccineAlert(todayBookings){
           <div class="va-time">${b.time}</div>
           <div class="va-pet">
             <b>${b.petName}</b>
-            <i>${b.ownerName} · ${b.svcName}</i>
+            <i>${b.ownerName} · ${admSvcName(b)}</i>
             <div class="va-detail">${b.vaccineDetail || t('adm.vac.fallback')}</div>
           </div>
           <div class="va-vac">
@@ -6749,7 +6920,7 @@ function sendVaccineReminderMsg(bookingId){
   const b = ADMIN.todayBookings.find(x=>x.id===bookingId);
   if(!b) return;
   // 시연: 채팅창으로 이동하면서 안내 토스트
-  alert(t('adm.vac.sendDone',{name:b.ownerName,contact:b.contact,time:b.time,svc:b.svcName,pet:b.petName}));
+  alert(t('adm.vac.sendDone',{name:b.ownerName,contact:b.contact,time:b.time,svc:admSvcName(b),pet:b.petName}));
   ADMIN.selectedChat = ADMIN.chats[0].id;
   goAdmin('chat');
 }
@@ -6896,7 +7067,7 @@ function renderDormantCampaign(){
         <button class="btn ghost" style="flex:1" onclick="CAMPAIGN_STATE.step='compose';renderDormantCampaign()">${t('adm.dc.editBack')}</button>
         <button class="btn dark" style="flex:2" onclick="confirmDormantCampaign()" ${targets.length===0?'disabled':''}>${t('adm.dc.sendBtn',{n:targets.length})}</button>
       </div>
-    `);
+    `, renderDormantCampaign);
     return;
   }
 
@@ -6975,7 +7146,7 @@ function renderDormantCampaign(){
 
     <button class="btn dark" style="margin-top:6px" ${targets.length===0?'disabled style="opacity:.5"':''} onclick="CAMPAIGN_STATE.step='preview';renderDormantCampaign()">${t('adm.dc.toPreview')}</button>
     <button class="btn ghost" style="margin-top:8px" onclick="closeSheet()">${t('adm.dc.cancel')}</button>
-  `);
+  `, renderDormantCampaign);
 }
 
 function toggleCampChannel(ch){
@@ -7031,7 +7202,7 @@ function renderDormantCampaignSent(){
     </div>
 
     <button class="btn dark" style="margin-top:14px" onclick="closeSheet();renderAdmin()">${t('adm.dc.backToDash')}</button>
-  `);
+  `, renderDormantCampaignSent);
 }
 
 // ----- 예약 관리 -----
@@ -7046,7 +7217,7 @@ function vAdminBookings(){
     <button class="fchip on">${t('adm.bk.all',{n:tb.length})}</button>
     ${Object.entries(STATUS_INFO).slice(0,5).map(([k,v])=>{
       const n = tb.filter(b=>b.status===k).length;
-      return `<button class="fchip">${v.label} ${n}</button>`;
+      return `<button class="fchip">${statusLabel(k)} ${n}</button>`;
     }).join('')}
   </div>
 
@@ -7056,9 +7227,9 @@ function vAdminBookings(){
       ${tb.map(b=>`<div class="bk-tr">
         <span class="bk-time">${b.time}</span>
         <span class="bk-pet"><b>${b.petName}</b><i>${b.ownerName} · ${b.band}</i></span>
-        <span class="bk-svc">${b.svcName}<i>${b.room}</i></span>
+        <span class="bk-svc">${admSvcName(b)}<i>${b.room}</i></span>
         <span class="bk-pr">${fmt(b.price)} <em>VND</em></span>
-        <span><span class="bk-st" style="background:${STATUS_INFO[b.status].bg};color:${STATUS_INFO[b.status].color}">${STATUS_INFO[b.status].label}</span></span>
+        <span><span class="bk-st" style="background:${STATUS_INFO[b.status].bg};color:${STATUS_INFO[b.status].color}">${statusLabel(b.status)}</span></span>
         <span class="bk-act">
           ${b.pickup?'<span class="tag pk">🚐</span>':''}
           ${b.live?'<button class="bk-cam" onclick="openLiveCam(\''+b.room+'\',true)">📹</button>':''}
@@ -7086,7 +7257,7 @@ function vAdminMembers(){
         <span><span class="m-tier">${t('adm.mb.tierLine',{tier:m.tier})}</span></span>
         <span class="m-bal">${fmt(m.balance)} <em>VND</em></span>
         <span class="m-used">${fmt(m.used)} <em>VND</em></span>
-        <span>${m.recent}</span>
+        <span>${admRecent(m.recent)}</span>
         <span class="bk-act">
           <button class="bk-cam" onclick="event.stopPropagation();openMemberDetail('${m.id}')">${t('adm.mb.history')}</button>
           <button class="bk-cam" onclick="event.stopPropagation();openContactSheet()">💬</button>
@@ -7156,7 +7327,7 @@ function openMemberDetail(memberId){
           ${m.contact} · <span class="m-tier">${t('adm.md.tierLine',{tier:m.tier})}</span>
           <span style="color:var(--gray);margin-left:6px">${t('adm.md.joined',{date:m.joined})}</span>
         </div>
-        <div class="md-pets">${t('adm.md.recentLine',{pets:m.petNames.join(' · '),date:m.recent})}</div>
+        <div class="md-pets">${t('adm.md.recentLine',{pets:m.petNames.join(' · '),date:admRecent(m.recent)})}</div>
       </div>
     </div>
 
@@ -7207,11 +7378,11 @@ function openMemberDetail(memberId){
             <div class="md-tl-card ${isCharge?'charge':''}">
               <div class="md-tl-row1">
                 ${meta?`<span class="md-tl-ic" style="background:${meta.color}20;color:${meta.color}">${meta.icon}</span>`:'<span class="md-tl-ic charge">＋</span>'}
-                <span class="md-tl-label">${h.label}</span>
+                <span class="md-tl-label">${admHistLabel(h)}</span>
                 ${h.note?`<span class="md-tl-note">${h.note}</span>`:''}
               </div>
               ${h.pet?`<div class="md-tl-sub">${h.pet}</div>`:''}
-              ${h.paid?`<div class="md-tl-sub">${h.paid}</div>`:''}
+              ${h.paid?`<div class="md-tl-sub">${admHistPaid(h)}</div>`:''}
               <div class="md-tl-amt-row">
                 <span class="md-tl-amt ${isCharge?'plus':'minus'}">${h.amount>0?'+':''}${fmt(h.amount)} VND</span>
                 <span class="md-tl-bal">${t('adm.md.balRow',{amount:fmt(h.balance)})}</span>
@@ -7361,10 +7532,8 @@ function renderIssueVipMember(){
     </div>` : ''}
 
     <button class="btn ghost" style="margin-top:14px" onclick="closeSheet()">${t('adm.issue.cancel')}</button>
-  `);
+  `, renderIssueVipSheet);
 }
-
-// 검색 결과 lazy 갱신 — DOM 직접 패치
 function renderIssueVipMemberList(q){
   const list = document.getElementById('issueMemberList');
   if(!list) return;
@@ -7421,7 +7590,7 @@ function renderIssueVipPkg(){
       <button class="btn ghost" style="flex:1" onclick="ISSUE_STATE.step='member';renderIssueVipSheet()">${t('adm.issue.back')}</button>
       <button class="btn ghost" style="flex:1" onclick="closeSheet()">${t('adm.issue.cancel')}</button>
     </div>
-  `);
+  `, renderIssueVipSheet);
 }
 
 function selectIssuePkg(pkgId){
@@ -7462,7 +7631,7 @@ function renderIssueVipPay(){
       <button class="btn ghost" style="flex:1" onclick="ISSUE_STATE.step='pkg';renderIssueVipSheet()">${t('adm.issue.back')}</button>
       <button class="btn ghost" style="flex:1" onclick="closeSheet()">${t('adm.issue.cancel')}</button>
     </div>
-  `);
+  `, renderIssueVipSheet);
 }
 
 function confirmIssueVip(){
@@ -7543,7 +7712,7 @@ function renderIssueVipDone(){
       <div style="font-size:11.5px;color:var(--gray);margin-top:6px">${t('adm.issue.doneNote')}</div>
     </div>
     <button class="btn dark" style="margin-top:14px" onclick="closeSheet();renderAdmin()">${t('adm.issue.close')}</button>
-  `);
+  `, renderIssueVipSheet);
 }
 
 // ============================================================================
@@ -7588,7 +7757,7 @@ function renderVaccineInputSheet(){
 
   openSheetHTML(`<div class="grab"></div>
     <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--brown);font-weight:600;padding:0 2px 2px">${t('adm.vac.input.title')}</div>
-    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">${t('adm.vac.input.sub',{pet:b.petName,owner:b.ownerName,svc:b.svcName})}</div>
+    <div style="font-size:12.5px;color:var(--gray);padding:0 2px 14px">${t('adm.vac.input.sub',{pet:b.petName,owner:b.ownerName,svc:admSvcName(b)})}</div>
 
     <!-- 광견병 -->
     <div class="vaccineRow" style="margin-top:6px">
@@ -7633,7 +7802,7 @@ function renderVaccineInputSheet(){
 
     <button class="btn dark" style="margin-top:14px" onclick="saveVaccineInput()">${t('adm.vac.input.save')}</button>
     <button class="btn ghost" style="margin-top:8px" onclick="closeSheet()">${t('adm.vac.input.cancel')}</button>
-  `);
+  `, renderVaccineInputSheet);
 }
 
 function saveVaccineInput(){
