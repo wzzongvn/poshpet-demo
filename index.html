@@ -320,6 +320,9 @@
     color:#fff; border-radius:16px; padding:13px 15px; font-size:12.5px; box-shadow:var(--shadow);
     display:flex; gap:10px; align-items:center; opacity:0; transform:translateY(10px); transition:.3s; pointer-events:none;}
   .pophint.show{opacity:1; transform:translateY(0);}
+  /* 빌드 버전 표식: 좌하단 구석, 극소형·반투명. 디자인/조작 방해 없음(클릭 통과) */
+  #buildBadge{position:absolute; left:6px; bottom:2px; z-index:40; font-size:8px; line-height:1;
+    color:var(--mochaSoft); opacity:.35; pointer-events:none; user-select:none; letter-spacing:.2px;}
 
   /* side legend */
   .legend{width:300px; max-width:100%;}
@@ -1251,6 +1254,9 @@
     <!-- sheet -->
     <div class="sheetbg" id="sheetbg" onclick="closeSheet()"></div>
     <div class="sheet" id="sheet"></div>
+
+    <!-- 빌드 버전 표식 (배포 확인용) — 좌하단 구석에 아주 작고 흐리게. 디자인/조작 방해 없음 -->
+    <div id="buildBadge"></div>
   </div>
 
   <!-- ===================== LEGEND ===================== -->
@@ -1271,7 +1277,7 @@
 
 // ===== 빌드 버전 표식 (배포 반영 확인용) =====
 // 새로고침 후 콘솔과 화면 우상단 배지에서 이 값이 바뀌면 = 최신 배포 반영됨.
-const BUILD_VERSION = 'v2026.05.29-pickup-fix';
+const BUILD_VERSION = 'v2026.05.29-b';
 try{ console.log('%cPoshPet '+BUILD_VERSION, 'background:#4A2F1D;color:#fff;padding:3px 8px;border-radius:6px'); }catch(e){}
 
 const I18N = {
@@ -3357,7 +3363,7 @@ I18N['langChanged.toast.en'] = {kr:'영어로 전환됨', vi:'Đã chuyển sang
 // 언어 토글 버튼 HTML (상단바 우측에 삽입)
 function langToggleHTML(){
   const labels = { kr:'한', vi:'VI', en:'EN' };
-  return `<span class="buildbadge" style="font-size:9px;color:var(--mochaSoft);margin-right:6px;opacity:.7">${BUILD_VERSION}</span><div class="langtoggle">
+  return `<div class="langtoggle">
     <button class="lt-btn" onclick="toggleLangMenu()" aria-label="${t('topbar.langLabel')}">
       <span class="lt-cur">${labels[CURRENT_LANG]}</span>
       <span class="lt-arr">▾</span>
@@ -6795,9 +6801,15 @@ function bindFlow(){
     rail.addEventListener('scroll', sync, {passive:true});
     sync();
   }
-  // 픽업 단계: 화면이 그려진 직후, 현재 입력/선택값으로 '예약 확인' 버튼 상태를 즉시 맞춘다.
-  // (입력칸이 이미 채워진 채 다시 렌더된 경우에도 버튼 색이 곧바로 동기화되도록)
-  if(typeof refreshFootBtn==='function' && $('flowNext')){ refreshFootBtn(); }
+  // 픽업 단계에서만: 화면이 그려진 직후, 현재 입력/선택값으로 '예약 확인' 버튼 상태를 즉시 맞춘다.
+  // (refreshFootBtn은 주소/전화 검증을 하므로 다른 단계(메뉴·날짜·시간)에서 호출하면
+  //  버튼을 잘못 비활성화시킨다. 반드시 픽업 단계로만 한정.)
+  try{
+    if(typeof curStep==='function' && curStep()==='pickup'
+       && typeof refreshFootBtn==='function' && $('flowNext')){
+      refreshFootBtn();
+    }
+  }catch(e){}
 }
 
 // ============================ RESET ============================
@@ -8230,6 +8242,8 @@ function checkRouteHash(){
 window.addEventListener('hashchange', checkRouteHash);
 
 // ============================ BOOT ============================
+// 빌드 버전 표식 채우기 (좌하단 구석)
+try{ const _bb=document.getElementById('buildBadge'); if(_bb) _bb.textContent=BUILD_VERSION; }catch(e){}
 go('home');
 checkRouteHash();
 </script>
