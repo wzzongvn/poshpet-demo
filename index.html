@@ -1269,6 +1269,11 @@
 // Phase 2: 마이펫·둘러보기·VIP·정기배송
 // Phase 3: 관리자 화면
 
+// ===== 빌드 버전 표식 (배포 반영 확인용) =====
+// 새로고침 후 콘솔과 화면 우상단 배지에서 이 값이 바뀌면 = 최신 배포 반영됨.
+const BUILD_VERSION = 'v2026.05.29-pickup-fix';
+try{ console.log('%cPoshPet '+BUILD_VERSION, 'background:#4A2F1D;color:#fff;padding:3px 8px;border-radius:6px'); }catch(e){}
+
 const I18N = {
   // ===== 상단바·하단 네비 =====
   'nav.home':       {kr:'홈',         vi:'Trang chủ',     en:'Home'},
@@ -3352,7 +3357,7 @@ I18N['langChanged.toast.en'] = {kr:'영어로 전환됨', vi:'Đã chuyển sang
 // 언어 토글 버튼 HTML (상단바 우측에 삽입)
 function langToggleHTML(){
   const labels = { kr:'한', vi:'VI', en:'EN' };
-  return `<div class="langtoggle">
+  return `<span class="buildbadge" style="font-size:9px;color:var(--mochaSoft);margin-right:6px;opacity:.7">${BUILD_VERSION}</span><div class="langtoggle">
     <button class="lt-btn" onclick="toggleLangMenu()" aria-label="${t('topbar.langLabel')}">
       <span class="lt-cur">${labels[CURRENT_LANG]}</span>
       <span class="lt-arr">▾</span>
