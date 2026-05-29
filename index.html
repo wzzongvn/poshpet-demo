@@ -269,6 +269,8 @@
   /* sticky footer bar inside flow */
   .flowfoot{position:absolute; left:0; right:0; bottom:74px; padding:14px 18px 18px;
     background:linear-gradient(180deg, transparent, var(--cream2) 26%); z-index:55;}
+  /* inline 모드: 하단 고정 대신 콘텐츠 흐름 안에 배치 (입력 요소가 많은 픽업 단계용) */
+  .flowfoot.inline{position:static; bottom:auto; padding:4px 18px 0; background:none; z-index:auto;}
   .quote{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:10px; padding:0 4px;}
   .quote .ql{font-size:12px; color:var(--gray);}
   .quote .qv{font-family:'Fraunces',serif; font-size:22px; font-weight:600; color:var(--brown);}
@@ -5297,8 +5299,9 @@ function stepPickup(s){
     </div>
   </div>
 
-  <div style="height:170px"></div>
-  ${flowFoot(has && addrOk && phoneOk, t('bk.pickup.next'))}`;
+  <div style="height:28px"></div>
+  ${flowFoot(has && addrOk && phoneOk, t('bk.pickup.next'), true)}
+  <div style="height:96px"></div>`;
 }
 
 function addressReady(){
@@ -5333,11 +5336,11 @@ function pickupAddrSection(){
   if(adding || S.addresses.length===0){
     return `<div class="field" style="margin-top:14px">
       <label>${t('bk.addr.labelTitle')} <span class="optional">${t('bk.addr.labelHint')}</span></label>
-      <input id="addrLabelIn" placeholder="${t('bk.addr.labelPh')}" value="${S.d.addonAddrLabel||''}" oninput="S.d.addonAddrLabel=this.value; refreshFootBtn()">
+      <input id="addrLabelIn" placeholder="${t('bk.addr.labelPh')}" value="${S.d.addonAddrLabel||''}" oninput="syncPickupInputs()" onchange="syncPickupInputs()" onblur="syncPickupInputs()" oncompositionend="syncPickupInputs()">
     </div>
     <div class="field" style="padding:0">
       <label>${t('bk.addr.detail')}</label>
-      <input id="addrIn" placeholder="${t('bk.addr.detailPh')}" value="${S.d.addonAddr||''}" oninput="S.d.addonAddr=this.value; refreshFootBtn()">
+      <input id="addrIn" placeholder="${t('bk.addr.detailPh')}" value="${S.d.addonAddr||''}" oninput="syncPickupInputs()" onchange="syncPickupInputs()" onblur="syncPickupInputs()" oncompositionend="syncPickupInputs()">
       <div style="font-size:11px;color:var(--gray);margin-top:8px">${t('bk.addr.saveNote')}</div>
     </div>
     ${S.addresses.length>0?`<button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="S.d.addrId=S.addresses.find(a=>a.isDefault)?.id||S.addresses[0].id; S.d.addonAddrLabel=null; S.d.addonAddr=null; render('flow')">${t('bk.addr.backList')}</button>`:''}`;
@@ -5365,11 +5368,11 @@ function phoneSection(){
   if(adding || S.phones.length===0){
     return `<div class="field" style="margin-top:6px">
       <label>${t('bk.phone.labelTitle')} <span class="optional">${t('bk.phone.labelHint')}</span></label>
-      <input id="phLabelIn" placeholder="${t('bk.phone.labelPh')}" value="${S.d.addonPhoneLabel||''}" oninput="S.d.addonPhoneLabel=this.value; refreshFootBtn()">
+      <input id="phLabelIn" placeholder="${t('bk.phone.labelPh')}" value="${S.d.addonPhoneLabel||''}" oninput="syncPickupInputs()" onchange="syncPickupInputs()" onblur="syncPickupInputs()" oncompositionend="syncPickupInputs()">
     </div>
     <div class="field" style="padding:0">
       <label>${t('bk.phone.numTitle')}</label>
-      <input id="phNumIn" type="tel" inputmode="numeric" placeholder="${t('bk.phone.numPh')}" value="${S.d.addonPhone||''}" oninput="S.d.addonPhone=this.value; refreshFootBtn()">
+      <input id="phNumIn" type="tel" inputmode="numeric" placeholder="${t('bk.phone.numPh')}" value="${S.d.addonPhone||''}" oninput="syncPickupInputs()" onchange="syncPickupInputs()" onblur="syncPickupInputs()" oncompositionend="syncPickupInputs()">
       <div style="font-size:11px;color:var(--gray);margin-top:8px">${t('bk.addr.saveNote')}</div>
     </div>
     ${S.phones.length>0?`<button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="S.d.phoneId=S.phones.find(p=>p.isDefault)?.id||S.phones[0].id; S.d.addonPhoneLabel=null; S.d.addonPhone=null; render('flow')">${t('bk.phone.backList')}</button>`:''}`;
@@ -5415,6 +5418,19 @@ function refreshFootBtn(){
   btn.disabled = !ready;
   // 색도 함께 갱신: 준비되면 soft(연한색) 제거 → 진한 활성색
   btn.classList.toggle('soft', !ready);
+}
+
+// 픽업 입력칸 공통 핸들러.
+// 한글(IME) 조합 중에는 oninput이 미완성 글자로만 발화되거나 늦게 발화될 수 있어,
+// 항상 현재 input 값들을 직접 읽어 상태에 반영한 뒤 버튼을 갱신한다.
+// oninput·onchange·onblur·oncompositionend 어느 경로로 불려도 동일하게 동작한다.
+function syncPickupInputs(){
+  const al=$('addrLabelIn'), ad=$('addrIn'), pl=$('phLabelIn'), pn=$('phNumIn');
+  if(al) S.d.addonAddrLabel=al.value;
+  if(ad) S.d.addonAddr=ad.value;
+  if(pl) S.d.addonPhoneLabel=pl.value;
+  if(pn) S.d.addonPhone=pn.value;
+  refreshFootBtn();
 }
 
 // 호환용 (이전 newAddr는 신규 진입으로 매핑)
@@ -5569,9 +5585,12 @@ function calcTotal(){
 }
 
 // --- flow footer (live quote) ---
-function flowFoot(enabled, label){
+function flowFoot(enabled, label, inline){
   // 항상 클릭 가능. 무엇이 부족한지 flowNext에서 알려준다 (silent fail 방지)
-  return `<div class="flowfoot"><button class="btn ${enabled?'':'soft'}" id="flowNext" onclick="flowNext()">${label} →</button></div>`;
+  // inline=true면 화면 하단 고정이 아니라 콘텐츠 흐름 안에 버튼을 둔다.
+  // (입력 요소가 많은 픽업 단계에서 고정 버튼이 입력칸·전화번호를 덮는 문제 방지)
+  const cls = inline ? 'flowfoot inline' : 'flowfoot';
+  return `<div class="${cls}"><button class="btn ${enabled?'':'soft'}" id="flowNext" onclick="flowNext()">${label} →</button></div>`;
 }
 function flowFootStay(){
   const n=nights(); const ok=S.d.dateA&&S.d.dateB;
@@ -6632,7 +6651,7 @@ function renderPetSheet(){
 
     <div class="field" style="padding:0 2px 14px">
       <label>${t('petForm.nameLabel')}</label>
-      <input id="petName" placeholder="${t('petForm.namePh')}" value="${d.name}" oninput="S._petDraft.name=this.value; refreshPetReady()">
+      <input id="petName" placeholder="${t('petForm.namePh')}" value="${d.name}" oninput="S._petDraft.name=this.value; refreshPetReady()" onchange="S._petDraft.name=this.value; refreshPetReady()" onblur="S._petDraft.name=this.value; refreshPetReady()" oncompositionend="S._petDraft.name=this.value; refreshPetReady()">
     </div>
     <div style="padding:0 2px 6px"><label style="font-size:12.5px;font-weight:600;color:var(--mocha)">${t('petForm.kind')}</label></div>
     <div style="display:flex;gap:10px;padding:0 2px 16px">
@@ -6771,6 +6790,9 @@ function bindFlow(){
     rail.addEventListener('scroll', sync, {passive:true});
     sync();
   }
+  // 픽업 단계: 화면이 그려진 직후, 현재 입력/선택값으로 '예약 확인' 버튼 상태를 즉시 맞춘다.
+  // (입력칸이 이미 채워진 채 다시 렌더된 경우에도 버튼 색이 곧바로 동기화되도록)
+  if(typeof refreshFootBtn==='function' && $('flowNext')){ refreshFootBtn(); }
 }
 
 // ============================ RESET ============================
