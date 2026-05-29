@@ -320,9 +320,11 @@
     color:#fff; border-radius:16px; padding:13px 15px; font-size:12.5px; box-shadow:var(--shadow);
     display:flex; gap:10px; align-items:center; opacity:0; transform:translateY(10px); transition:.3s; pointer-events:none;}
   .pophint.show{opacity:1; transform:translateY(0);}
-  /* 빌드 버전 표식: 좌하단 구석, 극소형·반투명. 디자인/조작 방해 없음(클릭 통과) */
-  #buildBadge{position:absolute; left:6px; bottom:2px; z-index:40; font-size:8px; line-height:1;
-    color:var(--mochaSoft); opacity:.35; pointer-events:none; user-select:none; letter-spacing:.2px;}
+  /* 빌드 버전 표식: 좌하단(하단 탭바 바로 위). 개발 중 식별용. 클릭 통과 */
+  #buildBadge{position:absolute; left:8px; bottom:80px; z-index:56; font-size:10.5px; line-height:1;
+    color:#fff; background:rgba(74,47,29,.62); padding:3px 7px; border-radius:7px;
+    opacity:.9; pointer-events:none; user-select:none; letter-spacing:.2px; font-weight:600;
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;}
 
   /* side legend */
   .legend{width:300px; max-width:100%;}
@@ -1277,7 +1279,7 @@
 
 // ===== 빌드 버전 표식 (배포 반영 확인용) =====
 // 새로고침 후 콘솔과 화면 우상단 배지에서 이 값이 바뀌면 = 최신 배포 반영됨.
-const BUILD_VERSION = 'v2026.05.29-b';
+const BUILD_VERSION = 'build 05-29 17:25';
 try{ console.log('%cPoshPet '+BUILD_VERSION, 'background:#4A2F1D;color:#fff;padding:3px 8px;border-radius:6px'); }catch(e){}
 
 const I18N = {
@@ -5274,11 +5276,12 @@ function stepPickup(s){
   // R4: 픽업 단계 진입 시 기본값을 '네, 픽업 받을게요'로
   if(S.d.pickup===null || S.d.pickup===undefined){
     S.d.pickup = 'yes';
-    // 기본 주소가 있으면 자동 선택 (없으면 사용자가 고르거나 추가)
-    if(!S.d.addrId){
-      const defAddr = S.addresses.find(a=>a.isDefault) || S.addresses[0];
-      if(defAddr) S.d.addrId = defAddr.id;
-    }
+  }
+  // 픽업 주소: 저장된 주소가 있고 아직 아무것도 선택 안 했으면 기본 주소를 자동 선택.
+  // (전화번호와 동일한 루틴 — 저장 주소가 0건일 때만 입력칸이 뜨고, 1건+면 목록에서 우선 선택)
+  if(S.d.pickup==='yes' && !S.d.addrId && S.addresses.length){
+    const defAddr = S.addresses.find(a=>a.isDefault) || S.addresses[0];
+    if(defAddr) S.d.addrId = defAddr.id;
   }
   // 연락받을 번호: 저장된 기본 번호가 있으면 자동 선택.
   // 이게 빠지면 phoneReady()가 false라 주소를 다 채워도 '예약 확인' 버튼이 비활성(회색)으로 남는다.
@@ -5649,8 +5652,12 @@ function flowBack(){
 }
 
 function submitBooking(){
-  // 1) 신규 입력한 주소가 있으면 라벨과 함께 영구 저장
-  if(S.d.pickup==='yes' && S.d.addrId==='__new__' && S.d.addonAddr && S.d.addonAddrLabel){
+  // 1) 신규 입력한 주소가 있으면 라벨과 함께 영구 저장.
+  //    입력칸이 떠 있던 경우 = 명시적 신규(__new__) 또는 저장 주소가 0건이라 입력칸이 바로 떴을 때.
+  //    (pickupAddrSection / addressReady의 isInputMode 조건과 일치시킨다.
+  //     0건일 때 addrId가 null이라 __new__만 검사하면 첫 주소가 영영 저장되지 않는 버그가 생긴다.)
+  const addrInputMode = (S.d.addrId==='__new__') || (S.addresses.length===0);
+  if(S.d.pickup==='yes' && addrInputMode && S.d.addonAddr && S.d.addonAddrLabel){
     const newAddr = {
       id:'ad'+Date.now(),
       label:S.d.addonAddrLabel.trim(),
@@ -5659,6 +5666,8 @@ function submitBooking(){
     };
     S.addresses.push(newAddr);
     S.d.addrId = newAddr.id;
+    // 다음 예약을 위해 입력 임시값은 정리 (저장된 주소가 우선 선택되도록)
+    S.d.addonAddr = null; S.d.addonAddrLabel = null;
   }
   // 2) 신규 입력한 전화번호도 라벨과 함께 영구 저장
   if(S.d.phoneId==='__new__' && S.d.addonPhone && S.d.addonPhoneLabel){
